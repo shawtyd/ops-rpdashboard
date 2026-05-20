@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Bear Home Inspections - Operations Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 13px;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 0;
+            border-bottom: 2px solid #e0e6ed;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #64748b;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tab.active {
+            color: #667eea;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #667eea;
+        }
+
+        .tab:hover:not(.active) {
+            color: #667eea;
+            background: #f8fafc;
+        }
+
+        .tab-content {
+            display: none;
+            padding-top: 24px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.11);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 34px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .kpi-target {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+        }
+
+        .progress-fill.success {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-section {
+            background: white;
+            padding: 26px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            margin-bottom: 18px;
+        }
+
+        .form-section h3 {
+            font-size: 16px;
+            color: #1e293b;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            color: #475569;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .kpi-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .kpi-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .kpi-table td {
+            padding: 11px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        .kpi-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .kpi-table input {
+            padding: 6px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 13px;
+            width: 100%;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .metric-input {
+            width: 80px;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .activity-log {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .activity-card {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .activity-label {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .activity-input {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 4px;
+        }
+
+        .activity-target {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        .notes-section {
+            margin-top: 20px;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        .error {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: #991b1b;
+            margin-bottom: 16px;
+        }
+
+        .success {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: #166534;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Golden Bear Home Inspections</h1>
+            <p>Operations Dashboard</p>
+            <div class="user-info">
+                <span>Dashboard Date: <strong id="dashboard-date"></strong></span>
+                <span id="sync-status">Last synced: Never</span>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="growth-coordinator">Growth Coordinator</button>
+            <button class="tab" data-tab="operations">Operations</button>
+            <button class="tab" data-tab="reports">Reports</button>
+        </div>
+
+        <!-- Growth Coordinator Tab -->
+        <div id="growth-coordinator" class="tab-content active">
+            <div class="form-section">
+                <h3>This Week's Activity Log</h3>
+                <div class="activity-log" id="activity-log">
+                    <!-- Activity cards will be generated here -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>4-Week KPI Dashboard</h3>
+                <div style="overflow-x: auto;">
+                    <table class="kpi-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Week 1</th>
+                                <th>Week 2</th>
+                                <th>Week 3</th>
+                                <th>Week 4</th>
+                                <th>4-Week Avg</th>
+                                <th>Target</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kpi-table-body">
+                            <!-- Table rows will be generated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="notes-section">
+                    <label for="weekly-notes">Notes & Obstacles:</label>
+                    <textarea id="weekly-notes" class="notes-textarea" placeholder="Record any obstacles, wins, or notes for this week..."></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="logThisWeek()">Log This Week</button>
+                    <button class="btn btn-secondary" onclick="saveKpiData()">Save Table</button>
+                    <button class="btn btn-secondary" onclick="copyReportForJoe()">Copy Report for Joe</button>
+                </div>
+
+                <div id="message-area" style="margin-top: 16px;"></div>
+            </div>
+        </div>
+
+        <!-- Operations Tab -->
+        <div id="operations" class="tab-content">
+            <div class="card">
+                <h3>Daily Operations Log</h3>
+                <p style="color: #94a3b8; margin-bottom: 16px;">Track daily operational metrics and updates</p>
+                <!-- Operations content will go here -->
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports" class="tab-content">
+            <div class="card">
+                <h3>Weekly Reports</h3>
+                <p style="color: #94a3b8; margin-bottom: 16px;">View historical reports and analytics</p>
+                <!-- Reports content will go here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const METRICS = [
+            { name: 'Calls', target: 50 },
+            { name: 'Conversations', target: 30 },
+            { name: 'Meetings Scheduled', target: 15 },
+            { name: 'Meetings Completed', target: 12 },
+            { name: 'Inactive Outreach', target: 8 },
+            { name: 'Reviews Requested', target: 10 },
+            { name: 'Reviews Generated', target: 8 },
+            { name: 'CRM Updates', target: 20 },
+            { name: 'Duplicates Removed', target: 5 },
+            { name: 'Postcards', target: 15 }
+        ];
+
+        const WEEKS = [1, 2, 3, 4];
+        const API_BASE = '/api';
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            setDashboardDate();
+            initializeTabs();
+            initializeActivityLog();
+            initializeKpiTable();
+            loadKpiData();
+        });
+
+        // Set current date
+        function setDashboardDate() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('dashboard-date').textContent = today.toLocaleDateString('en-US', options);
+        }
+
+        // Tab switching
+        function initializeTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        // Initialize activity log cards
+        function initializeActivityLog() {
+            const container = document.getElementById('activity-log');
+            container.innerHTML = '';
+
+            METRICS.forEach(metric => {
+                const card = document.createElement('div');
+                card.className = 'activity-card';
+                card.innerHTML = `
+                    <div class="activity-label">${metric.name}</div>
+                    <input type="number" class="activity-input" data-metric="${metric.name}" value="0" min="0">
+                    <div class="activity-target">Target: ${metric.target}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Initialize KPI table
+        function initializeKpiTable() {
+            const tbody = document.getElementById('kpi-table-body');
+            tbody.innerHTML = '';
+
+            METRICS.forEach(metric => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${metric.name}</strong></td>
+                    ${WEEKS.map(week => `
+                        <td>
+                            <input type="number" class="metric-input" data-metric="${metric.name}" data-week="${week}" value="0" min="0">
+                        </td>
+                    `).join('')}
+                    <td><strong id="avg-${metric.name}">0</strong></td>
+                    <td>${metric.target}</td>
+                    <td><span class="status-badge" id="status-${metric.name}">-</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Load KPI data from server
+        async function loadKpiData() {
+            try {
+                const response = await fetch(`${API_BASE}/kpi/all`);
+                const kpis = await response.json();
+
+                // Populate table with data
+                kpis.forEach(kpi => {
+                    const input = document.querySelector(`input[data-metric="${kpi.metric_name}"][data-week="${kpi.week}"]`);
+                    if (input) {
+                        input.value = kpi.value;
+                    }
+                });
+
+                calculateAverages();
+                updateSyncStatus();
+            } catch (error) {
+                console.error('Error loading KPI data:', error);
+                showMessage('Error loading data from server', 'error');
+            }
+        }
+
+        // Calculate 4-week averages and update status
+        function calculateAverages() {
+            METRICS.forEach(metric => {
+                const values = WEEKS.map(week => {
+                    const input = document.querySelector(`input[data-metric="${metric.name}"][data-week="${week}"]`);
+                    return parseInt(input?.value || 0);
+                });
+
+                const average = values.length > 0 ? Math.round(values.reduce((a, b) => a + b) / values.length) : 0;
+                const avgCell = document.getElementById(`avg-${metric.name}`);
+                if (avgCell) {
+                    avgCell.textContent = average;
+                }
+
+                updateStatus(metric.name, average, metric.target);
+            });
+        }
+
+        // Update status badge based on performance
+        function updateStatus(metricName, value, target) {
+            const statusCell = document.getElementById(`status-${metricName}`);
+            if (!statusCell) return;
+
+            const percentage = (value / target) * 100;
+
+            if (percentage >= 100) {
+                statusCell.textContent = '✓ On Target';
+                statusCell.className = 'status-badge status-success';
+            } else if (percentage >= 75) {
+                statusCell.textContent = '⚠ Warning';
+                statusCell.className = 'status-badge status-warning';
+            } else {
+                statusCell.textContent = '✗ Below Target';
+                statusCell.className = 'status-badge status-danger';
+            }
+        }
+
+        // Log this week's data
+        async function logThisWeek() {
+            const inputs = document.querySelectorAll('.activity-input');
+            const currentWeek = 1; // In a real app, calculate the current week
+
+            try {
+                for (const input of inputs) {
+                    const metricName = input.dataset.metric;
+                    const value = parseInt(input.value) || 0;
+                    const metric = METRICS.find(m => m.name === metricName);
+
+                    await fetch(`${API_BASE}/kpi`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            week: currentWeek,
+                            metric_name: metricName,
+                            value: value,
+                            target: metric.target,
+                            notes: ''
+                        })
+                    });
+                }
+
+                showMessage('✓ Week logged successfully', 'success');
+                loadKpiData();
+            } catch (error) {
+                console.error('Error logging week:', error);
+                showMessage('Error saving data', 'error');
+            }
+        }
+
+        // Save KPI table data
+        async function saveKpiData() {
+            try {
+                const inputs = document.querySelectorAll('.metric-input');
+                const notes = document.getElementById('weekly-notes').value;
+
+                for (const input of inputs) {
+                    const metricName = input.dataset.metric;
+                    const week = parseInt(input.dataset.week);
+                    const value = parseInt(input.value) || 0;
+                    const metric = METRICS.find(m => m.name === metricName);
+
+                    await fetch(`${API_BASE}/kpi`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            week: week,
+                            metric_name: metricName,
+                            value: value,
+                            target: metric.target,
+                            notes: notes
+                        })
+                    });
+                }
+
+                showMessage('✓ All data saved successfully', 'success');
+                calculateAverages();
+                updateSyncStatus();
+            } catch (error) {
+                console.error('Error saving data:', error);
+                showMessage('Error saving data to server', 'error');
+            }
+        }
+
+        // Copy report for Joe
+        function copyReportForJoe() {
+            let report = `WEEKLY KPI REPORT - ${new Date().toLocaleDateString()}\n`;
+            report += `${'='.repeat(50)}\n\n`;
+
+            METRICS.forEach(metric => {
+                const avgCell = document.getElementById(`avg-${metric.name}`);
+                const average = parseInt(avgCell?.textContent || 0);
+                const percentage = ((average / metric.target) * 100).toFixed(1);
+                report += `${metric.name}: ${average}/${metric.target} (${percentage}%)\n`;
+            });
+
+            const notes = document.getElementById('weekly-notes').value;
+            if (notes) {
+                report += `\nNotes:\n${notes}\n`;
+            }
+
+            navigator.clipboard.writeText(report).then(() => {
+                showMessage('✓ Report copied to clipboard', 'success');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                showMessage('Error copying report', 'error');
+            });
+        }
+
+        // Show status message
+        function showMessage(message, type) {
+            const messageArea = document.getElementById('message-area');
+            const className = type === 'success' ? 'success' : 'error';
+            messageArea.innerHTML = `<div class="${className}">${message}</div>`;
+
+            setTimeout(() => {
+                messageArea.innerHTML = '';
+            }, 5000);
+        }
+
+        // Update sync status
+        function updateSyncStatus() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('sync-status').textContent = `Last synced: ${timeString}`;
+        }
+
+        // Auto-calculate averages on input change
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('metric-input')) {
+                calculateAverages();
+            }
+        });
+    </script>
+</body>
+</html>
