@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golden Bear Home Inspections - Operations Dashboard</title>
+    <title>Operations Specialist Dashboard - Golden Bear Inspections</title>
     <style>
         * {
             margin: 0;
@@ -34,14 +34,20 @@
         }
 
         header h1 {
-            font-size: 26px;
-            font-weight: 600;
+            font-size: 28px;
+            font-weight: 700;
             margin-bottom: 4px;
         }
 
-        header p {
-            opacity: 0.9;
+        header .subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 2px;
+        }
+
+        header .byline {
             font-size: 13px;
+            opacity: 0.85;
         }
 
         .user-info {
@@ -51,28 +57,32 @@
             margin-top: 12px;
             padding-top: 12px;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .tabs {
             display: flex;
-            gap: 6px;
+            gap: 2px;
             margin-bottom: 0;
             border-bottom: 2px solid #e0e6ed;
             flex-wrap: wrap;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            padding: 0 20px;
         }
 
         .tab {
-            padding: 12px 20px;
-            background: white;
+            padding: 14px 18px;
+            background: transparent;
             border: none;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 600;
             color: #64748b;
-            border-radius: 8px 8px 0 0;
             transition: all 0.2s;
             position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .tab.active {
@@ -91,17 +101,19 @@
 
         .tab:hover:not(.active) {
             color: #667eea;
-            background: #f8fafc;
         }
 
         .tab-content {
             display: none;
-            padding-top: 24px;
+            background: white;
+            padding: 28px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            animation: fadeIn 0.3s;
         }
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.3s;
         }
 
         @keyframes fadeIn {
@@ -115,29 +127,33 @@
             }
         }
 
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
         }
 
         .kpi-card {
             background: white;
-            padding: 22px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .kpi-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.11);
+            border-left: 4px solid #667eea;
         }
 
         .kpi-label {
-            font-size: 12px;
-            color: #64748b;
+            font-size: 11px;
+            color: #94a3b8;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -145,79 +161,61 @@
         }
 
         .kpi-value {
-            font-size: 34px;
+            font-size: 32px;
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 4px;
         }
 
         .kpi-target {
-            font-size: 13px;
-            color: #94a3b8;
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 10px;
         }
 
         .progress-bar {
             background: #e2e8f0;
-            height: 8px;
+            height: 6px;
             border-radius: 10px;
             overflow: hidden;
-            margin-top: 8px;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, #10b981, #059669);
             border-radius: 10px;
-            transition: width 0.5s ease;
+            transition: width 0.4s ease;
         }
 
         .progress-fill.warning {
-            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            background: linear-gradient(90deg, #f59e0b, #d97706);
         }
 
-        .progress-fill.success {
-            background: linear-gradient(90deg, #10b981, #059669);
+        .progress-fill.danger {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
         }
 
         .card {
             background: white;
             padding: 24px;
-            border-radius: 12px;
+            border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
             margin-bottom: 20px;
         }
 
-        .card h3 {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
-        }
-
         .form-section {
             background: white;
-            padding: 26px;
-            border-radius: 12px;
+            padding: 24px;
+            border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-            margin-bottom: 18px;
-        }
-
-        .form-section h3 {
-            font-size: 16px;
-            color: #1e293b;
-            margin-bottom: 18px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
+            margin-bottom: 20px;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
+            margin-bottom: 20px;
         }
 
         .form-group {
@@ -226,24 +224,28 @@
         }
 
         .form-group label {
-            font-size: 13px;
+            font-size: 12px;
             color: #475569;
             margin-bottom: 6px;
-            font-weight: 500;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             padding: 10px 12px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             transition: all 0.2s;
             font-family: inherit;
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -252,15 +254,15 @@
         .button-group {
             display: flex;
             gap: 12px;
-            margin-top: 24px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 11px 22px;
             border: none;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -269,12 +271,12 @@
         .btn-primary {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
         }
 
         .btn-secondary {
@@ -284,273 +286,767 @@
         }
 
         .btn-secondary:hover {
-            background: #667eea;
-            color: white;
+            background: #f0f4ff;
         }
 
-        .kpi-table {
+        .workflow-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .workflow-day {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .workflow-items {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .workflow-items li {
+            padding: 6px 0;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        .workflow-items li:before {
+            content: "• ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .data-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14px;
+            font-size: 13px;
         }
 
-        .kpi-table th {
+        .data-table th {
             background: #667eea;
             color: white;
             padding: 12px 16px;
             text-align: left;
             font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
-        .kpi-table td {
-            padding: 11px 16px;
+        .data-table td {
+            padding: 12px 16px;
             border-bottom: 1px solid #e2e8f0;
-            color: #334155;
+            color: #475569;
         }
 
-        .kpi-table tr:hover td {
+        .data-table tr:hover td {
             background: #f8fafc;
         }
 
-        .kpi-table input {
+        .data-table input {
             padding: 6px 8px;
             border: 1px solid #e2e8f0;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 12px;
             width: 100%;
+        }
+
+        .data-table input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f0f4ff;
         }
 
         .status-badge {
             padding: 4px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
+            text-transform: uppercase;
         }
 
-        .status-success {
+        .status-on-track {
             background: #dcfce7;
             color: #166534;
         }
 
-        .status-warning {
+        .status-at-risk {
             background: #fef3c7;
             color: #92400e;
         }
 
-        .status-danger {
+        .status-behind {
             background: #fee2e2;
             color: #991b1b;
         }
 
-        .metric-input {
-            width: 80px;
-            padding: 6px 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .activity-log {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
+        .accordion {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
             margin-bottom: 20px;
         }
 
-        .activity-card {
+        .accordion-header {
+            background: #f8fafc;
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1e293b;
+            transition: all 0.2s;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .accordion-header:hover {
+            background: #f0f4ff;
+            color: #667eea;
+        }
+
+        .accordion-header.active {
+            background: #667eea;
+            color: white;
+            border-bottom-color: #667eea;
+        }
+
+        .accordion-content {
+            padding: 20px;
+            background: white;
+            display: none;
+        }
+
+        .accordion-content.active {
+            display: block;
+        }
+
+        .script-text {
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #334155;
+            border-left: 3px solid #667eea;
+            margin-bottom: 12px;
+            font-family: 'Courier New', monospace;
+            word-wrap: break-word;
+        }
+
+        .message {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            color: #166534;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .alert-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #92400e;
+        }
+
+        .non-negotiables {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+        }
+
+        .non-negotiables ol {
+            padding-left: 20px;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        .non-negotiables li {
+            margin-bottom: 8px;
+        }
+
+        .metric-box {
             background: white;
             padding: 16px;
             border-radius: 8px;
             border-left: 4px solid #667eea;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #475569;
         }
 
-        .activity-label {
-            font-size: 11px;
-            color: #94a3b8;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .activity-input {
-            font-size: 24px;
-            font-weight: 700;
+        .metric-box strong {
             color: #1e293b;
-            width: 100%;
+        }
+
+        .copy-button {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
             border: none;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
         }
 
-        .activity-target {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-top: 6px;
+        .copy-button:hover {
+            background: #764ba2;
         }
 
-        .notes-section {
-            margin-top: 20px;
-        }
+        @media (max-width: 768px) {
+            .tabs {
+                padding: 0 10px;
+            }
 
-        .notes-textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-        }
+            .tab {
+                padding: 12px 10px;
+                font-size: 11px;
+            }
 
-        .notes-textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
 
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #94a3b8;
-        }
-
-        .error {
-            background: #fee2e2;
-            border-left: 4px solid #ef4444;
-            padding: 14px 18px;
-            border-radius: 8px;
-            color: #991b1b;
-            margin-bottom: 16px;
-        }
-
-        .success {
-            background: #dcfce7;
-            border-left: 4px solid #10b981;
-            padding: 14px 18px;
-            border-radius: 8px;
-            color: #166534;
-            margin-bottom: 16px;
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Golden Bear Home Inspections</h1>
-            <p>Operations Dashboard</p>
+            <h1>Operations Specialist Dashboard</h1>
+            <div class="subtitle">Project: Golden Bear Inspections</div>
+            <div class="byline">Duff Rose T. — Operations Specialist / Growth Coordinator</div>
             <div class="user-info">
-                <span>Dashboard Date: <strong id="dashboard-date"></strong></span>
+                <span>Date: <strong id="dashboard-date"></strong></span>
                 <span id="sync-status">Last synced: Never</span>
             </div>
         </header>
 
         <div class="tabs">
-            <button class="tab active" data-tab="growth-coordinator">Growth Coordinator</button>
-            <button class="tab" data-tab="operations">Operations</button>
-            <button class="tab" data-tab="reports">Reports</button>
+            <button class="tab active" data-tab="home">Home</button>
+            <button class="tab" data-tab="daily-ops">Daily Ops</button>
+            <button class="tab" data-tab="progress">Progress</button>
+            <button class="tab" data-tab="sop-hub">SOP Hub</button>
+            <button class="tab" data-tab="call-scripts">Call Scripts</button>
+            <button class="tab" data-tab="retention">Retention</button>
         </div>
 
-        <!-- Growth Coordinator Tab -->
-        <div id="growth-coordinator" class="tab-content active">
+        <!-- TAB 1: HOME -->
+        <div id="home" class="tab-content active">
+            <div class="section-title">Weekly KPI Overview</div>
+            <div class="kpi-grid" id="home-kpi-grid">
+                <!-- KPI cards populated by JavaScript -->
+            </div>
+
+            <div class="card">
+                <div class="section-title" style="margin-bottom: 16px;">Today's Focus Area</div>
+                <div id="todays-workflow"></div>
+            </div>
+
+            <div class="card">
+                <div class="section-title" style="margin-bottom: 16px;">Key Win This Week</div>
+                <div class="form-group">
+                    <textarea id="weekly-win" class="form-group" style="padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; min-height: 80px;" placeholder="What's your biggest win this week?"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="saveWeeklyWin()" style="margin-top: 12px;">Save Win</button>
+            </div>
+
+            <div id="bottleneck-alert"></div>
+        </div>
+
+        <!-- TAB 2: DAILY OPS -->
+        <div id="daily-ops" class="tab-content">
+            <div class="section-title">Daily Input Form (90 seconds)</div>
             <div class="form-section">
-                <h3>This Week's Activity Log</h3>
-                <div class="activity-log" id="activity-log">
-                    <!-- Activity cards will be generated here -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Growth: Outbound Calls</label>
+                        <input type="number" id="calls" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Growth: Reached (Conversations)</label>
+                        <input type="number" id="conversations" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Growth: Inactive/No Response</label>
+                        <input type="number" id="inactive-growth" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Growth: Escalated/Complaints</label>
+                        <input type="number" id="escalated" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>CRM: General Contacts Updated</label>
+                        <input type="number" id="crm-general" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>CRM: RP Contacts Updated (Missing Data)</label>
+                        <input type="number" id="crm-rp" min="0" placeholder="0">
+                    </div>
                 </div>
-            </div>
-
-            <div class="card">
-                <h3>4-Week KPI Dashboard</h3>
-                <div style="overflow-x: auto;">
-                    <table class="kpi-table">
-                        <thead>
-                            <tr>
-                                <th>Metric</th>
-                                <th>Week 1</th>
-                                <th>Week 2</th>
-                                <th>Week 3</th>
-                                <th>Week 4</th>
-                                <th>4-Week Avg</th>
-                                <th>Target</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="kpi-table-body">
-                            <!-- Table rows will be generated here -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="notes-section">
-                    <label for="weekly-notes">Notes & Obstacles:</label>
-                    <textarea id="weekly-notes" class="notes-textarea" placeholder="Record any obstacles, wins, or notes for this week..."></textarea>
-                </div>
-
                 <div class="button-group">
-                    <button class="btn btn-primary" onclick="logThisWeek()">Log This Week</button>
-                    <button class="btn btn-secondary" onclick="saveKpiData()">Save Table</button>
-                    <button class="btn btn-secondary" onclick="copyReportForJoe()">Copy Report for Joe</button>
+                    <button class="btn btn-primary" onclick="saveDailyLog()">Save Daily Log</button>
                 </div>
+                <div id="daily-message"></div>
+            </div>
 
-                <div id="message-area" style="margin-top: 16px;"></div>
+            <div class="section-title" style="margin-top: 28px;">Today's Workflow Focus</div>
+            <div id="daily-workflow-section"></div>
+        </div>
+
+        <!-- TAB 3: PROGRESS -->
+        <div id="progress" class="tab-content">
+            <div class="section-title">Weekly KPI Tracker</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Current</th>
+                            <th>Goal</th>
+                            <th>Progress</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="progress-table">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="bottleneck-suggestions"></div>
+
+            <div class="card">
+                <div class="section-title">4-Week Trend</div>
+                <p style="color: #94a3b8; font-size: 13px; margin-bottom: 16px;">Historical data for top 3 KPIs</p>
+                <div id="trend-chart"></div>
             </div>
         </div>
 
-        <!-- Operations Tab -->
-        <div id="operations" class="tab-content">
+        <!-- TAB 4: SOP HUB -->
+        <div id="sop-hub" class="tab-content">
+            <div class="section-title">Your Dual Role</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 14px;">Growth Coordinator</strong>
+                    <p style="font-size: 13px; color: #475569; margin-top: 8px;">Outbound relationship building (new RP, reactivation, social visibility)</p>
+                </div>
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 14px;">CRM Manager</strong>
+                    <p style="font-size: 13px; color: #475569; margin-top: 8px;">Inbound relationship maintenance (data hygiene, appreciation, follow-ups)</p>
+                </div>
+            </div>
+
+            <div class="section-title">Weekly Workflow Master</div>
+            <div id="sop-workflows"></div>
+
+            <div class="section-title" style="margin-top: 28px;">Non-Negotiables</div>
+            <div class="non-negotiables">
+                <ol>
+                    <li>Smile while speaking</li>
+                    <li>Log immediately — if it's not logged, it didn't happen</li>
+                    <li>Relationships first, business second</li>
+                    <li>Consistency > perfection</li>
+                    <li>Never guess county tags or brokerage names</li>
+                    <li>No CRM system changes without approval</li>
+                    <li>No workflow/automation creation without approval</li>
+                </ol>
+            </div>
+
+            <div class="section-title" style="margin-top: 28px;">CRM Master Record Requirements</div>
             <div class="card">
-                <h3>Daily Operations Log</h3>
-                <p style="color: #94a3b8; margin-bottom: 16px;">Track daily operational metrics and updates</p>
-                <!-- Operations content will go here -->
+                <p style="font-size: 13px; color: #475569; line-height: 1.8;">Every realtor MUST have:
+                    <br>• Full Name
+                    <br>• Brokerage Name (verified)
+                    <br>• Phone Number
+                    <br>• Email
+                    <br>• Mailing Address
+                    <br>• County Tag (verified)
+                    <br>• Birthday (if available)
+                    <br>• Notes (last interaction logged)
+                </p>
+            </div>
+
+            <div class="section-title" style="margin-top: 28px;">KPI Targets</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 13px; text-transform: uppercase;">Growth Coordinator KPIs</strong>
+                    <div style="font-size: 12px; color: #475569; margin-top: 12px; line-height: 1.8;">
+                        • Outbound Realtor Calls: 75
+                        <br>• Realtor Conversations: 20+
+                        <br>• Realtor Meetings Scheduled: 4
+                        <br>• Follow-Up Emails/Texts: 25+
+                        <br>• Inactive Agents Contacted: 15
+                        <br>• Social Posts Published: 3–5
+                        <br>• Review Requests Sent: 100% of completed inspections
+                        <br>• Google Reviews Generated: 2+
+                    </div>
+                </div>
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 13px; text-transform: uppercase;">CRM Manager KPIs</strong>
+                    <div style="font-size: 12px; color: #475569; margin-top: 12px; line-height: 1.8;">
+                        • CRM Contacts Updated: 25+
+                        <br>• RP Contacts Updated (Missing Data): 10+
+                        <br>• Duplicate Records Removed: Weekly reduction
+                        <br>• Postcards Assigned: 5–10
+                        <br>• Birthday Cards Sent: Monthly
+                        <br>• Inactive Agents Contacted: 10+
+                        <br>• CRM Accuracy: 95%+
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Reports Tab -->
-        <div id="reports" class="tab-content">
-            <div class="card">
-                <h3>Weekly Reports</h3>
-                <p style="color: #94a3b8; margin-bottom: 16px;">View historical reports and analytics</p>
-                <!-- Reports content will go here -->
+        <!-- TAB 5: CALL SCRIPTS -->
+        <div id="call-scripts" class="tab-content">
+            <div class="section-title">Reference Library - Copy & Paste Ready</div>
+
+            <!-- Growth Coordinator Scripts -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Growth Coordinator — New Realtor Outreach</span>
+                    <span>▼</span>
+                </div>
+                <div class="accordion-content">
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">1. Standard New Realtor Outreach</h4>
+                    <div class="script-text">
+"Hi, this is Rose with Golden Bear Inspection Group. Is this [Agent Name]?
+I know I'm catching you during your workday so I'll keep this brief.
+I work directly with Joe, the owner. We've been expanding relationships with local agents and your name came up.
+Joe really enjoys building long-term relationships with agents.
+I'd love to learn about your business and see if we could grab coffee sometime.
+(PAUSE)
+How long have you been in real estate?
+Are you mainly working buyers or sellers?
+What's something you wish inspectors did better?"
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">2. Voicemail Script (New RP)</h4>
+                    <div class="script-text">
+"Hi [Agent Name], this is Rose with Golden Bear Inspection Group.
+I'm reaching out because Joe, our owner, has been connecting with local agents and we'd love to introduce ourselves.
+Feel free to give me a call back at [PHONE].
+I'll also send a quick follow-up message.
+Have a great day!"
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">3. SMS Follow-Up (New RP)</h4>
+                    <div class="script-text">
+"Hi [Agent Name], Rose with Golden Bear Inspection Group. Left a voicemail. Anything I can help with? Reply or call: [PHONE]."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+                </div>
             </div>
+
+            <!-- Retention Scripts -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Growth Coordinator — Retention & Check-ins</span>
+                    <span>▼</span>
+                </div>
+                <div class="accordion-content">
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">4. Realtor Retention Call</h4>
+                    <div class="script-text">
+"Hi [Agent Name], this is Rose with Golden Bear.
+I'm just checking in to see how things have been going for you and to thank you for continuing to trust us.
+How has business been lately?
+(PAUSE)
+Is there anything we could do better to support you or your clients during inspections?
+(PAUSE)
+Thank you again for your partnership. We really appreciate working with you."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">5. Inactive Agent Recovery</h4>
+                    <div class="script-text">
+"Hi [Agent Name], this is Rose with Golden Bear Inspection Group.
+I was reviewing our relationships and realized we haven't worked together in a while, so I wanted to check in and see how things have been going.
+(PAUSE)
+We've really appreciated working with you and wanted to reconnect.
+Has there been anything in our process or service that we could improve?
+(PAUSE)
+No pressure — we just value honest feedback and long-term relationships.
+Joe would also love to reconnect sometime if you'd like to grab coffee."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">6. Voicemail (Recovery)</h4>
+                    <div class="script-text">
+"Hi [Agent Name], this is Rose with Golden Bear Inspection Group.
+Joe's been reconnecting with local agents and we'd love to introduce ourselves again.
+Call me back at [PHONE]. I'll send a quick message too."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">7. SMS (Recovery)</h4>
+                    <div class="script-text">
+"Hi [Agent Name], Rose with Golden Bear. Left a voicemail. Would love to reconnect. Reply or call: [PHONE]."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+                </div>
+            </div>
+
+            <!-- Objection Handling -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Objection Handling & Special Situations</span>
+                    <span>▼</span>
+                </div>
+                <div class="accordion-content">
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">8. If Annoyed / "Why are you calling?"</h4>
+                    <div class="script-text">
+"I'll be quick — we're just reconnecting with local agents to keep relationships active and see if there's anything we can improve."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">9. If They Ask "What's in it for us?"</h4>
+                    <div class="script-text">
+"We focus on making inspections easier for agents and clients — clear reports, reliable scheduling, and good communication. Joe enjoys building long-term partnerships to support your transactions."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">10. If They Say "Who are you? I don't remember you"</h4>
+                    <div class="script-text">
+"I work with Joe at Golden Bear Inspection Group. We do residential inspections in [area]. We've worked with your office in the past — I just wanted to reconnect."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">11. If They Ask About Pricing/Benefits</h4>
+                    <div class="script-text">
+"I can get you pricing details — what type of properties do you mainly work with? I'll send it by email."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">12. If They Give Feedback/Complaint</h4>
+                    <div class="script-text">
+"Thank you for telling me; that's helpful. I'll note this and share it with Joe so we can improve."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">Closing Line (Always)</h4>
+                    <div class="script-text">
+"Thanks for your time — I'll log this and follow up by [email/text/phone] in a few weeks. Appreciate it."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+                </div>
+            </div>
+
+            <!-- CRM Manager Scripts -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>CRM Manager Scripts</span>
+                    <span>▼</span>
+                </div>
+                <div class="accordion-content">
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">13. Missing Information Request</h4>
+                    <div class="script-text">
+"Hi [Agent Name], this is Rose with Golden Bear Inspection Group.
+We're updating our realtor database to make sure we have the correct information for appreciation mailers.
+Would you mind sending over your preferred mailing address, brokerage name, and birthday (month/day only)?
+Thank you — we really appreciate it!"
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">14. Post-Inspection Follow-Up</h4>
+                    <div class="script-text">
+"Hi [Agent Name], this is Rose with Golden Bear Inspection Group.
+I just wanted to follow up regarding the inspection at [Property Address] and make sure everything went smoothly.
+Did you have any questions about the report or anything Joe noted?
+(PAUSE)
+We always appreciate feedback and want to improve. Thank you for trusting Golden Bear."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: RETENTION -->
+        <div id="retention" class="tab-content">
+            <div class="section-title">Postcard Queue</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Agent Name</th>
+                            <th>Brokerage</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Date Assigned</th>
+                        </tr>
+                    </thead>
+                    <tbody id="postcard-queue">
+                        <tr>
+                            <td><input type="text" placeholder="Agent name"></td>
+                            <td><input type="text" placeholder="Brokerage"></td>
+                            <td><input type="text" placeholder="First-time, repeat, milestone, etc."></td>
+                            <td>
+                                <select>
+                                    <option>Ready to send</option>
+                                    <option>Sent</option>
+                                    <option>Mailed</option>
+                                </select>
+                            </td>
+                            <td><input type="date"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-primary" onclick="addPostcardRow()">Add Row</button>
+            <button class="btn btn-secondary" onclick="savePostcards()">Save Postcard Queue</button>
+
+            <div class="section-title" style="margin-top: 28px;">Birthday Calendar</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Agent Name</th>
+                            <th>Brokerage</th>
+                            <th>Birthday (Month/Day)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="birthday-table">
+                        <tr>
+                            <td><input type="text" placeholder="Agent name"></td>
+                            <td><input type="text" placeholder="Brokerage"></td>
+                            <td><input type="text" placeholder="MM/DD"></td>
+                            <td>
+                                <select>
+                                    <option>Not yet</option>
+                                    <option>Assigned to Wren</option>
+                                    <option>Mailed</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-primary" onclick="addBirthdayRow()">Add Row</button>
+            <button class="btn btn-secondary" onclick="saveBirthdays()">Save Birthday Calendar</button>
+
+            <div class="section-title" style="margin-top: 28px;">Inactive Agents (90+ days)</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Agent Name</th>
+                            <th>Brokerage</th>
+                            <th>Last Inspection Date</th>
+                            <th>Status</th>
+                            <th>Last Contact Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inactive-table">
+                        <tr>
+                            <td><input type="text" placeholder="Agent name"></td>
+                            <td><input type="text" placeholder="Brokerage"></td>
+                            <td><input type="date"></td>
+                            <td>
+                                <select>
+                                    <option>Not contacted</option>
+                                    <option>Contacted</option>
+                                    <option>Follow-up pending</option>
+                                </select>
+                            </td>
+                            <td><input type="date"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-primary" onclick="addInactiveRow()">Add Row</button>
+            <button class="btn btn-secondary" onclick="saveInactive()">Save Inactive List</button>
         </div>
     </div>
 
     <script>
-        // Configuration
-        const METRICS = [
-            { name: 'Calls', target: 50 },
-            { name: 'Conversations', target: 30 },
-            { name: 'Meetings Scheduled', target: 15 },
-            { name: 'Meetings Completed', target: 12 },
-            { name: 'Inactive Outreach', target: 8 },
-            { name: 'Reviews Requested', target: 10 },
-            { name: 'Reviews Generated', target: 8 },
-            { name: 'CRM Updates', target: 20 },
-            { name: 'Duplicates Removed', target: 5 },
-            { name: 'Postcards', target: 15 }
-        ];
-
-        const WEEKS = [1, 2, 3, 4];
         const API_BASE = '/api';
+        const METRICS_CONFIG = {
+            'Outbound Calls': 75,
+            'Conversations': 20,
+            'Meetings Scheduled': 4,
+            'Inactive Agents Contacted': 15,
+            'CRM Contacts Updated': 25,
+            'RP Contacts Updated - Missing Data': 10,
+            'Reviews Generated': 2,
+            'Social Posts Published': 5,
+            'Postcards Sent': 5
+        };
 
-        // Initialize dashboard
+        const WORKFLOW_SCHEDULE = {
+            1: {
+                day: 'MONDAY',
+                title: 'Accountability & CRM Day',
+                items: ['KPI review', 'CRM cleanup', 'Weekly planning']
+            },
+            2: {
+                day: 'TUESDAY',
+                title: 'New Realtor Outreach Day',
+                items: ['15-20 outbound calls', '2-4 meaningful conversations', '1 meeting scheduled']
+            },
+            3: {
+                day: 'WEDNESDAY',
+                title: 'Retention & Inactive Day',
+                items: ['Contact 15 inactive agents', 'Complete all retention follow-ups', 'Log interactions in GHL']
+            },
+            4: {
+                day: 'THURSDAY',
+                title: 'Brand Visibility Day',
+                items: ['Publish 3-5 social posts', 'Send 100% review requests from completed inspections', 'Follow-up emails/texts']
+            },
+            5: {
+                day: 'FRIDAY',
+                title: 'Pipeline & Reporting Day',
+                items: ['Active agent review', 'Assign postcards', 'Weekly report submission']
+            }
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
             setDashboardDate();
             initializeTabs();
-            initializeActivityLog();
-            initializeKpiTable();
-            loadKpiData();
+            loadDashboardData();
+            displayTodaysWorkflow();
+            displaySOPWorkflows();
         });
 
-        // Set current date
         function setDashboardDate() {
             const today = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('dashboard-date').textContent = today.toLocaleDateString('en-US', options);
         }
 
-        // Tab switching
         function initializeTabs() {
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', function() {
@@ -561,234 +1057,329 @@
         }
 
         function switchTab(tabName) {
-            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
-
-            // Remove active class from all tabs
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.classList.remove('active');
             });
 
-            // Show selected tab
             document.getElementById(tabName).classList.add('active');
             document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
         }
 
-        // Initialize activity log cards
-        function initializeActivityLog() {
-            const container = document.getElementById('activity-log');
-            container.innerHTML = '';
-
-            METRICS.forEach(metric => {
-                const card = document.createElement('div');
-                card.className = 'activity-card';
-                card.innerHTML = `
-                    <div class="activity-label">${metric.name}</div>
-                    <input type="number" class="activity-input" data-metric="${metric.name}" value="0" min="0">
-                    <div class="activity-target">Target: ${metric.target}</div>
-                `;
-                container.appendChild(card);
-            });
+        function getTodayDayNumber() {
+            const day = new Date().getDay();
+            return day === 0 ? 5 : day;
         }
 
-        // Initialize KPI table
-        function initializeKpiTable() {
-            const tbody = document.getElementById('kpi-table-body');
-            tbody.innerHTML = '';
+        function displayTodaysWorkflow() {
+            const dayNum = getTodayDayNumber();
+            const workflow = WORKFLOW_SCHEDULE[dayNum];
+            const container = document.getElementById('todays-workflow');
 
-            METRICS.forEach(metric => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><strong>${metric.name}</strong></td>
-                    ${WEEKS.map(week => `
-                        <td>
-                            <input type="number" class="metric-input" data-metric="${metric.name}" data-week="${week}" value="0" min="0">
-                        </td>
-                    `).join('')}
-                    <td><strong id="avg-${metric.name}">0</strong></td>
-                    <td>${metric.target}</td>
-                    <td><span class="status-badge" id="status-${metric.name}">-</span></td>
+            if (workflow) {
+                container.innerHTML = `
+                    <div class="workflow-card">
+                        <div class="workflow-day">${workflow.day}: ${workflow.title}</div>
+                        <ul class="workflow-items">
+                            ${workflow.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
                 `;
-                tbody.appendChild(row);
-            });
+            }
         }
 
-        // Load KPI data from server
-        async function loadKpiData() {
+        function displaySOPWorkflows() {
+            const container = document.getElementById('sop-workflows');
+            let html = '';
+
+            for (let day in WORKFLOW_SCHEDULE) {
+                const workflow = WORKFLOW_SCHEDULE[day];
+                html += `
+                    <div class="workflow-card">
+                        <div class="workflow-day">${workflow.day}: ${workflow.title}</div>
+                        <ul class="workflow-items">
+                            ${workflow.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function displayDailyWorkflow() {
+            const dayNum = getTodayDayNumber();
+            const workflow = WORKFLOW_SCHEDULE[dayNum];
+            const container = document.getElementById('daily-workflow-section');
+
+            if (workflow) {
+                container.innerHTML = `
+                    <div class="workflow-card">
+                        <div class="workflow-day">${workflow.day}: ${workflow.title}</div>
+                        <ul class="workflow-items">
+                            ${workflow.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadDashboardData() {
             try {
                 const response = await fetch(`${API_BASE}/kpi/all`);
-                const kpis = await response.json();
-
-                // Populate table with data
-                kpis.forEach(kpi => {
-                    const input = document.querySelector(`input[data-metric="${kpi.metric_name}"][data-week="${kpi.week}"]`);
-                    if (input) {
-                        input.value = kpi.value;
-                    }
-                });
-
-                calculateAverages();
-                updateSyncStatus();
+                const data = await response.json();
+                updateKPICards(data);
+                updateProgressTable(data);
+                displayDailyWorkflow();
             } catch (error) {
-                console.error('Error loading KPI data:', error);
-                showMessage('Error loading data from server', 'error');
+                console.error('Error loading data:', error);
             }
         }
 
-        // Calculate 4-week averages and update status
-        function calculateAverages() {
-            METRICS.forEach(metric => {
-                const values = WEEKS.map(week => {
-                    const input = document.querySelector(`input[data-metric="${metric.name}"][data-week="${week}"]`);
-                    return parseInt(input?.value || 0);
-                });
+        function updateKPICards(data) {
+            const container = document.getElementById('home-kpi-grid');
+            const groupedMetrics = {};
 
-                const average = values.length > 0 ? Math.round(values.reduce((a, b) => a + b) / values.length) : 0;
-                const avgCell = document.getElementById(`avg-${metric.name}`);
-                if (avgCell) {
-                    avgCell.textContent = average;
+            data.forEach(kpi => {
+                if (!groupedMetrics[kpi.metric_name]) {
+                    groupedMetrics[kpi.metric_name] = [];
+                }
+                groupedMetrics[kpi.metric_name].push(kpi);
+            });
+
+            let html = '';
+            for (let metricName in groupedMetrics) {
+                const values = groupedMetrics[metricName];
+                const current = values.reduce((sum, v) => sum + v.value, 0);
+                const target = values[0]?.target || 0;
+                const percentage = (current / target) * 100;
+                let statusClass = 'success';
+                if (percentage < 50) statusClass = 'danger';
+                else if (percentage < 80) statusClass = 'warning';
+
+                html += `
+                    <div class="kpi-card">
+                        <div class="kpi-label">${metricName}</div>
+                        <div class="kpi-value">${current}</div>
+                        <div class="kpi-target">Goal: ${target}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${statusClass}" style="width: ${Math.min(percentage, 100)}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function updateProgressTable(data) {
+            const tbody = document.getElementById('progress-table');
+            const groupedMetrics = {};
+
+            data.forEach(kpi => {
+                if (!groupedMetrics[kpi.metric_name]) {
+                    groupedMetrics[kpi.metric_name] = { values: [], target: kpi.target };
+                }
+                groupedMetrics[kpi.metric_name].values.push(kpi.value);
+            });
+
+            let html = '';
+            for (let metricName in groupedMetrics) {
+                const { values, target } = groupedMetrics[metricName];
+                const current = values.reduce((a, b) => a + b, 0);
+                const percentage = (current / target) * 100;
+                let statusBadge = '<span class="status-badge status-on-track">✓ On Track</span>';
+                let statusClass = 'success';
+
+                if (percentage < 50) {
+                    statusBadge = '<span class="status-badge status-behind">✗ Behind</span>';
+                    statusClass = 'danger';
+                } else if (percentage < 80) {
+                    statusBadge = '<span class="status-badge status-at-risk">⚠ At Risk</span>';
+                    statusClass = 'warning';
                 }
 
-                updateStatus(metric.name, average, metric.target);
-            });
-        }
-
-        // Update status badge based on performance
-        function updateStatus(metricName, value, target) {
-            const statusCell = document.getElementById(`status-${metricName}`);
-            if (!statusCell) return;
-
-            const percentage = (value / target) * 100;
-
-            if (percentage >= 100) {
-                statusCell.textContent = '✓ On Target';
-                statusCell.className = 'status-badge status-success';
-            } else if (percentage >= 75) {
-                statusCell.textContent = '⚠ Warning';
-                statusCell.className = 'status-badge status-warning';
-            } else {
-                statusCell.textContent = '✗ Below Target';
-                statusCell.className = 'status-badge status-danger';
+                html += `
+                    <tr>
+                        <td><strong>${metricName}</strong></td>
+                        <td>${current}</td>
+                        <td>${target}</td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill ${statusClass}" style="width: ${Math.min(percentage, 100)}%"></div>
+                            </div>
+                        </td>
+                        <td>${statusBadge}</td>
+                    </tr>
+                `;
             }
+
+            tbody.innerHTML = html;
         }
 
-        // Log this week's data
-        async function logThisWeek() {
-            const inputs = document.querySelectorAll('.activity-input');
-            const currentWeek = 1; // In a real app, calculate the current week
+        async function saveDailyLog() {
+            const metrics = {
+                'Outbound Calls': parseInt(document.getElementById('calls').value) || 0,
+                'Conversations': parseInt(document.getElementById('conversations').value) || 0,
+                'Inactive Growth': parseInt(document.getElementById('inactive-growth').value) || 0,
+                'Escalated': parseInt(document.getElementById('escalated').value) || 0,
+                'CRM General Updated': parseInt(document.getElementById('crm-general').value) || 0,
+                'CRM RP Updated': parseInt(document.getElementById('crm-rp').value) || 0
+            };
 
             try {
-                for (const input of inputs) {
-                    const metricName = input.dataset.metric;
-                    const value = parseInt(input.value) || 0;
-                    const metric = METRICS.find(m => m.name === metricName);
-
-                    await fetch(`${API_BASE}/kpi`, {
+                for (let metricName in metrics) {
+                    await fetch(`${API_BASE}/ops-metric`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            week: currentWeek,
-                            metric_name: metricName,
-                            value: value,
-                            target: metric.target,
+                            metric_type: metricName,
+                            value: metrics[metricName],
                             notes: ''
                         })
                     });
                 }
 
-                showMessage('✓ Week logged successfully', 'success');
-                loadKpiData();
+                showMessage('Daily log saved successfully!', 'success', 'daily-message');
+                loadDashboardData();
             } catch (error) {
-                console.error('Error logging week:', error);
-                showMessage('Error saving data', 'error');
+                console.error('Error saving daily log:', error);
+                showMessage('Error saving daily log', 'error', 'daily-message');
             }
         }
 
-        // Save KPI table data
-        async function saveKpiData() {
-            try {
-                const inputs = document.querySelectorAll('.metric-input');
-                const notes = document.getElementById('weekly-notes').value;
+        async function saveWeeklyWin() {
+            const win = document.getElementById('weekly-win').value;
+            if (!win.trim()) {
+                showMessage('Please enter your win', 'error', 'home');
+                return;
+            }
 
-                for (const input of inputs) {
-                    const metricName = input.dataset.metric;
-                    const week = parseInt(input.dataset.week);
-                    const value = parseInt(input.value) || 0;
-                    const metric = METRICS.find(m => m.name === metricName);
+            localStorage.setItem('weekly-win', win);
+            showMessage('✓ Win saved!', 'success', 'home');
+            document.getElementById('weekly-win').value = '';
+        }
 
-                    await fetch(`${API_BASE}/kpi`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            week: week,
-                            metric_name: metricName,
-                            value: value,
-                            target: metric.target,
-                            notes: notes
-                        })
-                    });
-                }
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isActive = content.classList.contains('active');
 
-                showMessage('✓ All data saved successfully', 'success');
-                calculateAverages();
-                updateSyncStatus();
-            } catch (error) {
-                console.error('Error saving data:', error);
-                showMessage('Error saving data to server', 'error');
+            document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.accordion-header').forEach(el => el.classList.remove('active'));
+
+            if (!isActive) {
+                content.classList.add('active');
+                header.classList.add('active');
             }
         }
 
-        // Copy report for Joe
-        function copyReportForJoe() {
-            let report = `WEEKLY KPI REPORT - ${new Date().toLocaleDateString()}\n`;
-            report += `${'='.repeat(50)}\n\n`;
-
-            METRICS.forEach(metric => {
-                const avgCell = document.getElementById(`avg-${metric.name}`);
-                const average = parseInt(avgCell?.textContent || 0);
-                const percentage = ((average / metric.target) * 100).toFixed(1);
-                report += `${metric.name}: ${average}/${metric.target} (${percentage}%)\n`;
-            });
-
-            const notes = document.getElementById('weekly-notes').value;
-            if (notes) {
-                report += `\nNotes:\n${notes}\n`;
-            }
-
-            navigator.clipboard.writeText(report).then(() => {
-                showMessage('✓ Report copied to clipboard', 'success');
-            }).catch(err => {
-                console.error('Failed to copy:', err);
-                showMessage('Error copying report', 'error');
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
             });
         }
 
-        // Show status message
-        function showMessage(message, type) {
-            const messageArea = document.getElementById('message-area');
-            const className = type === 'success' ? 'success' : 'error';
-            messageArea.innerHTML = `<div class="${className}">${message}</div>`;
-
-            setTimeout(() => {
-                messageArea.innerHTML = '';
-            }, 5000);
+        function addPostcardRow() {
+            const tbody = document.getElementById('postcard-queue');
+            const newRow = tbody.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Agent name"></td>
+                <td><input type="text" placeholder="Brokerage"></td>
+                <td><input type="text" placeholder="Reason"></td>
+                <td>
+                    <select>
+                        <option>Ready to send</option>
+                        <option>Sent</option>
+                        <option>Mailed</option>
+                    </select>
+                </td>
+                <td><input type="date"></td>
+            `;
         }
 
-        // Update sync status
+        function savePostcards() {
+            localStorage.setItem('postcards', JSON.stringify(getTableData('postcard-queue')));
+            showMessage('Postcard queue saved!', 'success', 'retention');
+        }
+
+        function addBirthdayRow() {
+            const tbody = document.getElementById('birthday-table');
+            const newRow = tbody.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Agent name"></td>
+                <td><input type="text" placeholder="Brokerage"></td>
+                <td><input type="text" placeholder="MM/DD"></td>
+                <td>
+                    <select>
+                        <option>Not yet</option>
+                        <option>Assigned to Wren</option>
+                        <option>Mailed</option>
+                    </select>
+                </td>
+            `;
+        }
+
+        function saveBirthdays() {
+            localStorage.setItem('birthdays', JSON.stringify(getTableData('birthday-table')));
+            showMessage('Birthday calendar saved!', 'success', 'retention');
+        }
+
+        function addInactiveRow() {
+            const tbody = document.getElementById('inactive-table');
+            const newRow = tbody.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Agent name"></td>
+                <td><input type="text" placeholder="Brokerage"></td>
+                <td><input type="date"></td>
+                <td>
+                    <select>
+                        <option>Not contacted</option>
+                        <option>Contacted</option>
+                        <option>Follow-up pending</option>
+                    </select>
+                </td>
+                <td><input type="date"></td>
+            `;
+        }
+
+        function saveInactive() {
+            localStorage.setItem('inactive', JSON.stringify(getTableData('inactive-table')));
+            showMessage('Inactive agents list saved!', 'success', 'retention');
+        }
+
+        function getTableData(tableId) {
+            const table = document.getElementById(tableId);
+            const rows = [];
+            table.querySelectorAll('tr').forEach(row => {
+                const cells = [];
+                row.querySelectorAll('input, select').forEach(cell => {
+                    cells.push(cell.value);
+                });
+                if (cells.some(cell => cell)) rows.push(cells);
+            });
+            return rows;
+        }
+
+        function showMessage(msg, type, containerId) {
+            const container = document.getElementById(containerId || 'message-area');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.textContent = msg;
+            container.appendChild(div);
+            setTimeout(() => div.remove(), 4000);
+        }
+
         function updateSyncStatus() {
             const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById('sync-status').textContent = `Last synced: ${timeString}`;
+            document.getElementById('sync-status').textContent = `Last synced: ${now.toLocaleTimeString()}`;
         }
-
-        // Auto-calculate averages on input change
-        document.addEventListener('change', function(e) {
-            if (e.target.classList.contains('metric-input')) {
-                calculateAverages();
-            }
-        });
     </script>
 </body>
 </html>

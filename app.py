@@ -58,6 +58,39 @@ class OpsMetric(db.Model):
         }
 
 
+class RetentionRecord(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    agent_name = db.Column(db.String(100), nullable=False)
+    brokerage = db.Column(db.String(100))
+    record_type = db.Column(db.String(50), nullable=False)  # postcard, birthday, inactive
+    status = db.Column(db.String(100))
+    date_assigned = db.Column(db.DateTime)
+    date_sent = db.Column(db.DateTime)
+    birthday = db.Column(db.String(20))
+    last_inspection = db.Column(db.DateTime)
+    last_contact = db.Column(db.DateTime)
+    notes = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'agent_name': self.agent_name,
+            'brokerage': self.brokerage,
+            'record_type': self.record_type,
+            'status': self.status,
+            'date_assigned': self.date_assigned.isoformat() if self.date_assigned else None,
+            'date_sent': self.date_sent.isoformat() if self.date_sent else None,
+            'birthday': self.birthday,
+            'last_inspection': self.last_inspection.isoformat() if self.last_inspection else None,
+            'last_contact': self.last_contact.isoformat() if self.last_contact else None,
+            'notes': self.notes,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
+
+
 # KPI Metric Routes
 @app.route('/api/kpi', methods=['POST'])
 def save_kpi():
@@ -170,6 +203,58 @@ def delete_ops_metric(metric_id):
     db.session.delete(metric)
     db.session.commit()
     return jsonify({'message': 'Metric deleted'}), 200
+
+
+# Retention Records Routes
+@app.route('/api/retention', methods=['POST'])
+def save_retention_record():
+    data = request.json
+    record = RetentionRecord(
+        agent_name=data.get('agent_name'),
+        brokerage=data.get('brokerage'),
+        record_type=data.get('record_type'),
+        status=data.get('status'),
+        date_assigned=data.get('date_assigned'),
+        date_sent=data.get('date_sent'),
+        birthday=data.get('birthday'),
+        last_inspection=data.get('last_inspection'),
+        last_contact=data.get('last_contact'),
+        notes=data.get('notes', '')
+    )
+    db.session.add(record)
+    db.session.commit()
+    return jsonify(record.to_dict()), 201
+
+
+@app.route('/api/retention/<record_type>', methods=['GET'])
+def get_retention_by_type(record_type):
+    records = RetentionRecord.query.filter_by(record_type=record_type).order_by(RetentionRecord.created_at.desc()).all()
+    return jsonify([r.to_dict() for r in records])
+
+
+@app.route('/api/retention/<int:record_id>', methods=['PUT'])
+def update_retention(record_id):
+    record = RetentionRecord.query.get(record_id)
+    if not record:
+        return jsonify({'error': 'Record not found'}), 404
+
+    data = request.json
+    record.status = data.get('status', record.status)
+    record.date_sent = data.get('date_sent', record.date_sent)
+    record.notes = data.get('notes', record.notes)
+    db.session.commit()
+    return jsonify(record.to_dict()), 200
+
+
+@app.route('/api/retention/<int:record_id>', methods=['DELETE'])
+def delete_retention(record_id):
+    record = RetentionRecord.query.get(record_id)
+    if not record:
+        return jsonify({'error': 'Record not found'}), 404
+
+    db.session.delete(record)
+    db.session.commit()
+    return jsonify({'message': 'Record deleted'}), 200
 
 
 # Analytics Routes
