@@ -66,6 +66,24 @@ The dashboard will be available at `http://localhost:5000`
 gunicorn -w 4 -b 0.0.0.0:5000 app:app
 ```
 
+## Dashboard Access
+
+### Final HTML Link
+The Operations Specialist Dashboard is accessible via two routes:
+
+- **Primary Route**: `http://localhost:5000/`
+- **Alternative Route**: `http://localhost:5000/dashboard`
+
+Both routes serve the same dashboard interface located at `templates/dashboard.html`.
+
+### Dashboard Features
+- **Home Tab**: Weekly KPI overview and today's focus area
+- **Daily Ops Tab**: Quick daily input form (90 seconds to log activities)
+- **Progress Tab**: Weekly KPI tracker with 4-week trends
+- **SOP Hub Tab**: Standard operating procedures and workflow master
+- **Call Scripts Tab**: Copy & paste ready reference library for growth coordinator and CRM manager scripts
+- **Retention Tab**: Postcard queue, birthday calendar, and inactive agents list
+
 ## API Endpoints
 
 ### KPI Metrics
