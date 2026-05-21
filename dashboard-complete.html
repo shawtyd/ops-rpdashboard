@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operations Specialist Dashboard - Golden Bear Inspections</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        header .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 13px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 0;
+            border-bottom: 2px solid #e0e6ed;
+            flex-wrap: wrap;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            padding: 0 20px;
+        }
+
+        .tab {
+            padding: 14px 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.2s;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tab.active {
+            color: #667eea;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #667eea;
+        }
+
+        .tab:hover:not(.active) {
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 28px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            border-left: 4px solid #667eea;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .metric-target {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+
+        .percentage {
+            font-size: 13px;
+            font-weight: 600;
+            color: #667eea;
+            margin-top: 8px;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            color: #475569;
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 11px 22px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f4ff;
+        }
+
+        .alert-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #92400e;
+        }
+
+        .success-box {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #166534;
+        }
+
+        .message {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            color: #166534;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .summary-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        .summary-box strong {
+            color: #1e293b;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .data-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        .data-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .data-table input {
+            padding: 6px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 100%;
+        }
+
+        .copy-button {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .copy-button:hover {
+            background: #764ba2;
+        }
+
+        .workflow-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .workflow-day {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .workflow-items {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .workflow-items li {
+            padding: 6px 0;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        .workflow-items li:before {
+            content: "• ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .tabs { padding: 0 10px; }
+            .tab { padding: 12px 10px; font-size: 11px; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .header-info { flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏠 Golden Bear Home Inspections</h1>
+            <h2 style="font-size: 18px; margin-top: 8px; opacity: 0.95;">Operations Specialist Dashboard</h2>
+            <div class="header-info">
+                <span id="user-info">Duff Rose Trono — Operations Specialist / Admin</span>
+                <span id="dashboard-date"></span>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="operations">Operations</button>
+            <button class="tab" data-tab="metric-board">Metric Board</button>
+            <button class="tab" data-tab="goal-setting">Goal Setting</button>
+            <button class="tab" data-tab="rp-management">RP Management</button>
+            <button class="tab" data-tab="growth-coordinator">Growth Coordinator</button>
+        </div>
+
+        <!-- TAB 1: OPERATIONS -->
+        <div id="operations" class="tab-content active">
+            <div class="success-box">
+                📊 Dashboard updates from your Metric Board inputs. Data is saved locally in your browser.
+            </div>
+
+            <div class="section-title">Key Metrics</div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Leads Processed Today</div>
+                    <div class="metric-value" id="leads-today">0</div>
+                    <div class="metric-target">Target: 100/day</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill danger" id="leads-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="percentage" id="leads-percent">0%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Contacts Updated</div>
+                    <div class="metric-value" id="contacts-today">0</div>
+                    <div class="metric-target">Target: 20/day</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill danger" id="contacts-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="percentage" id="contacts-percent">0%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">RP Contacts Updated</div>
+                    <div class="metric-value" id="rp-contacts-today">0</div>
+                    <div class="metric-target">Weekly target: 25+</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill danger" id="rp-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="percentage" id="rp-percent">0%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Inspections Scheduled</div>
+                    <div class="metric-value" id="inspections-today">0</div>
+                    <div class="metric-target">Today's bookings</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill warning" id="inspections-progress" style="width: 50%"></div>
+                    </div>
+                    <div class="percentage">Status tracking</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">📈 Monthly Leads (2,200 Target)</div>
+                <div style="display: flex; align-items: baseline; gap: 16px;">
+                    <div style="font-size: 32px; font-weight: 700; color: #667eea;" id="monthly-leads">0</div>
+                    <div style="font-size: 13px; color: #94a3b8;">Cumulative leads processed toward monthly goal</div>
+                </div>
+                <div class="progress-bar" style="margin-top: 16px;">
+                    <div class="progress-fill" id="monthly-progress" style="width: 0%; background: linear-gradient(90deg, #667eea, #764ba2);"></div>
+                </div>
+                <div style="font-size: 13px; color: #667eea; font-weight: 600; margin-top: 8px;" id="monthly-percent">0% of 2,200 target</div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">🎯 Daily Goal Achievement</div>
+                <div style="font-size: 48px; font-weight: 700; color: #667eea; margin-bottom: 16px;" id="daily-goal">0%</div>
+                <div style="font-size: 13px; color: #64748b; margin-bottom: 16px;">of 100-lead target</div>
+                <div class="progress-bar" style="height: 12px;">
+                    <div class="progress-fill" id="daily-goal-progress" style="width: 0%; background: linear-gradient(90deg, #667eea, #764ba2);"></div>
+                </div>
+            </div>
+
+            <div class="alert-box" id="attention-needed">
+                ⚠️ <strong>Attention Needed</strong><br>
+                All metrics on track ✓
+            </div>
+
+            <div class="card">
+                <div class="section-title">📋 End of Day Summary</div>
+                <div class="summary-box">
+                    <strong>Leads Processed:</strong>
+                    <span id="summary-leads">0</span>
+                </div>
+                <div class="summary-box">
+                    <strong>Contacts Updated (General):</strong>
+                    <span id="summary-contacts">0</span>
+                </div>
+                <div class="summary-box">
+                    <strong>Opportunities Reviewed:</strong>
+                    <span id="summary-opportunities">0</span>
+                </div>
+                <div class="summary-box">
+                    <strong>Inspections Scheduled:</strong>
+                    <span id="summary-inspections">0</span>
+                </div>
+                <div class="summary-box">
+                    <strong>Calls Handled:</strong>
+                    <span id="summary-calls">0</span>
+                </div>
+                <div class="summary-box">
+                    <strong>RP Contacts Updated:</strong>
+                    <span id="summary-rp">0</span>
+                </div>
+                <div class="summary-box">
+                    <strong>Inactive Agents Contacted:</strong>
+                    <span id="summary-inactive">0</span>
+                </div>
+                <div class="summary-box">
+                    <strong>Daily Goal Achievement:</strong>
+                    <span id="summary-goal">0%</span>
+                </div>
+                <button class="copy-button" onclick="copyEODSummary()" style="margin-top: 16px;">📋 Copy EOD Summary for Joe</button>
+                <div id="copy-message"></div>
+            </div>
+        </div>
+
+        <!-- TAB 2: METRIC BOARD -->
+        <div id="metric-board" class="tab-content">
+            <div class="section-title">Start logging today's activities</div>
+            <div class="form-section">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Leads Processed</label>
+                        <input type="number" id="input-leads" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Contacts Updated</label>
+                        <input type="number" id="input-contacts" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>RP Contacts Updated</label>
+                        <input type="number" id="input-rp" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Opportunities Reviewed</label>
+                        <input type="number" id="input-opportunities" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Inspections Scheduled</label>
+                        <input type="number" id="input-inspections" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Calls Handled</label>
+                        <input type="number" id="input-calls" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Inactive Agents Contacted</label>
+                        <input type="number" id="input-inactive" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Notes (Optional)</label>
+                        <textarea id="input-notes" placeholder="Add any notes..." style="min-height: 60px;"></textarea>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="saveMetrics()">Log Metrics</button>
+                    <button class="btn btn-secondary" onclick="clearMetricInputs()">Clear</button>
+                </div>
+                <div id="metric-message"></div>
+            </div>
+
+            <div class="section-title">📊 Today's Data</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Count</th>
+                            <th>Time Logged</th>
+                        </tr>
+                    </thead>
+                    <tbody id="metrics-table">
+                        <tr><td colspan="3" style="text-align: center; color: #94a3b8;">No data logged yet. Start by entering your metrics above.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: GOAL SETTING -->
+        <div id="goal-setting" class="tab-content">
+            <div class="section-title">Weekly Goals & Targets</div>
+            <div class="form-section">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Daily Lead Target</label>
+                        <input type="number" id="target-daily-leads" min="0" placeholder="100" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Daily Contact Target</label>
+                        <input type="number" id="target-daily-contacts" min="0" placeholder="20" value="20">
+                    </div>
+                    <div class="form-group">
+                        <label>Weekly RP Target</label>
+                        <input type="number" id="target-weekly-rp" min="0" placeholder="25" value="25">
+                    </div>
+                    <div class="form-group">
+                        <label>Monthly Lead Target</label>
+                        <input type="number" id="target-monthly-leads" min="0" placeholder="2200" value="2200">
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="saveGoals()">Save Goals</button>
+                </div>
+                <div id="goal-message"></div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Current Goals Summary</div>
+                <div class="summary-box">
+                    <strong>Daily Lead Target:</strong>
+                    <span id="display-daily-leads">100</span>
+                </div>
+                <div class="summary-box">
+                    <strong>Daily Contact Target:</strong>
+                    <span id="display-daily-contacts">20</span>
+                </div>
+                <div class="summary-box">
+                    <strong>Weekly RP Target:</strong>
+                    <span id="display-weekly-rp">25</span>
+                </div>
+                <div class="summary-box">
+                    <strong>Monthly Lead Target:</strong>
+                    <span id="display-monthly-leads">2200</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: RP MANAGEMENT -->
+        <div id="rp-management" class="tab-content">
+            <div class="section-title">Realtor Partner Database</div>
+            <div class="form-section">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>RP Name</label>
+                        <input type="text" id="rp-name" placeholder="Agent name">
+                    </div>
+                    <div class="form-group">
+                        <label>Brokerage</label>
+                        <input type="text" id="rp-brokerage" placeholder="Brokerage name">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="rp-phone" placeholder="Phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="rp-email" placeholder="Email address">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="rp-status">
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>Follow-up</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="rp-notes" placeholder="Add notes..."></textarea>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="addRP()">Add RP</button>
+                </div>
+                <div id="rp-message"></div>
+            </div>
+
+            <div class="section-title">Your RP List</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Brokerage</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rp-table">
+                        <tr><td colspan="4" style="text-align: center; color: #94a3b8;">No RPs added yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 5: GROWTH COORDINATOR -->
+        <div id="growth-coordinator" class="tab-content">
+            <div class="section-title">Daily Workflow & Activity Log</div>
+
+            <div id="workflow-container"></div>
+
+            <div class="section-title" style="margin-top: 28px;">Weekly KPI Targets</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 13px; text-transform: uppercase;">Growth Coordinator KPIs</strong>
+                    <div style="font-size: 12px; color: #475569; margin-top: 12px; line-height: 1.8;">
+                        • Outbound Realtor Calls: 75<br>
+                        • Realtor Conversations: 20+<br>
+                        • Realtor Meetings Scheduled: 4<br>
+                        • Follow-Up Emails/Texts: 25+<br>
+                        • Inactive Agents Contacted: 15<br>
+                        • Social Posts Published: 3–5<br>
+                        • Review Requests Sent: 100% of completed inspections<br>
+                        • Google Reviews Generated: 2+
+                    </div>
+                </div>
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 13px; text-transform: uppercase;">CRM Manager KPIs</strong>
+                    <div style="font-size: 12px; color: #475569; margin-top: 12px; line-height: 1.8;">
+                        • CRM Contacts Updated: 25+<br>
+                        • RP Contacts Updated (Missing Data): 10+<br>
+                        • Duplicate Records Removed: Weekly reduction<br>
+                        • Postcards Assigned: 5–10<br>
+                        • Birthday Cards Sent: Monthly<br>
+                        • Inactive Agents Contacted: 10+<br>
+                        • CRM Accuracy: 95%+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WORKFLOW_SCHEDULE = {
+            1: { day: 'MONDAY', title: 'Accountability & CRM Day', items: ['KPI review', 'CRM cleanup', 'Weekly planning'] },
+            2: { day: 'TUESDAY', title: 'New Realtor Outreach Day', items: ['15-20 outbound calls', '2-4 meaningful conversations', '1 meeting scheduled'] },
+            3: { day: 'WEDNESDAY', title: 'Retention & Inactive Day', items: ['Contact 15 inactive agents', 'Complete all retention follow-ups', 'Log interactions'] },
+            4: { day: 'THURSDAY', title: 'Brand Visibility Day', items: ['Publish 3-5 social posts', 'Send 100% review requests', 'Follow-up emails/texts'] },
+            5: { day: 'FRIDAY', title: 'Pipeline & Reporting Day', items: ['Active agent review', 'Assign postcards', 'Weekly report submission'] }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setDashboardDate();
+            initializeTabs();
+            loadGoals();
+            displayWorkflows();
+            updateMetricsDisplay();
+            loadRPs();
+        });
+
+        function setDashboardDate() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('dashboard-date').textContent = today.toLocaleDateString('en-US', options);
+        }
+
+        function initializeTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        function saveMetrics() {
+            const metrics = {
+                leads: parseInt(document.getElementById('input-leads').value) || 0,
+                contacts: parseInt(document.getElementById('input-contacts').value) || 0,
+                rpContacts: parseInt(document.getElementById('input-rp').value) || 0,
+                opportunities: parseInt(document.getElementById('input-opportunities').value) || 0,
+                inspections: parseInt(document.getElementById('input-inspections').value) || 0,
+                calls: parseInt(document.getElementById('input-calls').value) || 0,
+                inactive: parseInt(document.getElementById('input-inactive').value) || 0,
+                notes: document.getElementById('input-notes').value,
+                timestamp: new Date().toISOString()
+            };
+
+            const logs = JSON.parse(localStorage.getItem('metricLogs')) || [];
+            logs.push(metrics);
+            localStorage.setItem('metricLogs', JSON.stringify(logs));
+
+            showMessage('Metrics saved successfully! ✓', 'success', 'metric-message');
+            clearMetricInputs();
+            updateMetricsDisplay();
+        }
+
+        function clearMetricInputs() {
+            document.getElementById('input-leads').value = '';
+            document.getElementById('input-contacts').value = '';
+            document.getElementById('input-rp').value = '';
+            document.getElementById('input-opportunities').value = '';
+            document.getElementById('input-inspections').value = '';
+            document.getElementById('input-calls').value = '';
+            document.getElementById('input-inactive').value = '';
+            document.getElementById('input-notes').value = '';
+        }
+
+        function updateMetricsDisplay() {
+            const logs = JSON.parse(localStorage.getItem('metricLogs')) || [];
+            const today = new Date().toDateString();
+
+            let todayMetrics = { leads: 0, contacts: 0, rpContacts: 0, opportunities: 0, inspections: 0, calls: 0, inactive: 0 };
+            let monthlyLeads = 0;
+
+            logs.forEach(log => {
+                const logDate = new Date(log.timestamp).toDateString();
+                if (logDate === today) {
+                    todayMetrics.leads += log.leads;
+                    todayMetrics.contacts += log.contacts;
+                    todayMetrics.rpContacts += log.rpContacts;
+                    todayMetrics.opportunities += log.opportunities;
+                    todayMetrics.inspections += log.inspections;
+                    todayMetrics.calls += log.calls;
+                    todayMetrics.inactive += log.inactive;
+                }
+                monthlyLeads += log.leads;
+            });
+
+            const goals = JSON.parse(localStorage.getItem('goals')) || { dailyLeads: 100, dailyContacts: 20, weeklyRP: 25, monthlyLeads: 2200 };
+
+            // Update Operations tab
+            const leadsPercent = Math.min((todayMetrics.leads / goals.dailyLeads) * 100, 100);
+            const contactsPercent = Math.min((todayMetrics.contacts / goals.dailyContacts) * 100, 100);
+            const rpPercent = Math.min((todayMetrics.rpContacts / goals.weeklyRP) * 100, 100);
+            const monthlyPercent = Math.min((monthlyLeads / goals.monthlyLeads) * 100, 100);
+
+            document.getElementById('leads-today').textContent = todayMetrics.leads;
+            document.getElementById('leads-percent').textContent = Math.round(leadsPercent) + '%';
+            document.getElementById('leads-progress').style.width = leadsPercent + '%';
+            updateProgressColor(document.getElementById('leads-progress'), leadsPercent);
+
+            document.getElementById('contacts-today').textContent = todayMetrics.contacts;
+            document.getElementById('contacts-percent').textContent = Math.round(contactsPercent) + '%';
+            document.getElementById('contacts-progress').style.width = contactsPercent + '%';
+            updateProgressColor(document.getElementById('contacts-progress'), contactsPercent);
+
+            document.getElementById('rp-contacts-today').textContent = todayMetrics.rpContacts;
+            document.getElementById('rp-percent').textContent = Math.round(rpPercent) + '%';
+            document.getElementById('rp-progress').style.width = rpPercent + '%';
+            updateProgressColor(document.getElementById('rp-progress'), rpPercent);
+
+            document.getElementById('inspections-today').textContent = todayMetrics.inspections;
+
+            document.getElementById('monthly-leads').textContent = monthlyLeads;
+            document.getElementById('monthly-percent').textContent = Math.round(monthlyPercent) + '% of ' + goals.monthlyLeads + ' target';
+            document.getElementById('monthly-progress').style.width = monthlyPercent + '%';
+
+            document.getElementById('daily-goal').textContent = Math.round(leadsPercent) + '%';
+            document.getElementById('daily-goal-progress').style.width = leadsPercent + '%';
+
+            // Update End of Day Summary
+            document.getElementById('summary-leads').textContent = todayMetrics.leads;
+            document.getElementById('summary-contacts').textContent = todayMetrics.contacts;
+            document.getElementById('summary-opportunities').textContent = todayMetrics.opportunities;
+            document.getElementById('summary-inspections').textContent = todayMetrics.inspections;
+            document.getElementById('summary-calls').textContent = todayMetrics.calls;
+            document.getElementById('summary-rp').textContent = todayMetrics.rpContacts;
+            document.getElementById('summary-inactive').textContent = todayMetrics.inactive;
+            document.getElementById('summary-goal').textContent = Math.round(leadsPercent) + '%';
+
+            // Update Metric Board table
+            updateMetricTable();
+        }
+
+        function updateProgressColor(element, percentage) {
+            element.classList.remove('danger', 'warning');
+            if (percentage < 50) element.classList.add('danger');
+            else if (percentage < 80) element.classList.add('warning');
+        }
+
+        function updateMetricTable() {
+            const logs = JSON.parse(localStorage.getItem('metricLogs')) || [];
+            const tbody = document.getElementById('metrics-table');
+
+            if (logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #94a3b8;">No data logged yet.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = logs.slice(-10).reverse().map(log => `
+                <tr>
+                    <td>Leads: ${log.leads}, Contacts: ${log.contacts}, RP: ${log.rpContacts}, Calls: ${log.calls}</td>
+                    <td>${log.leads + log.contacts + log.rpContacts}</td>
+                    <td>${new Date(log.timestamp).toLocaleTimeString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        function saveGoals() {
+            const goals = {
+                dailyLeads: parseInt(document.getElementById('target-daily-leads').value) || 100,
+                dailyContacts: parseInt(document.getElementById('target-daily-contacts').value) || 20,
+                weeklyRP: parseInt(document.getElementById('target-weekly-rp').value) || 25,
+                monthlyLeads: parseInt(document.getElementById('target-monthly-leads').value) || 2200
+            };
+
+            localStorage.setItem('goals', JSON.stringify(goals));
+            showMessage('Goals saved successfully! ✓', 'success', 'goal-message');
+
+            document.getElementById('display-daily-leads').textContent = goals.dailyLeads;
+            document.getElementById('display-daily-contacts').textContent = goals.dailyContacts;
+            document.getElementById('display-weekly-rp').textContent = goals.weeklyRP;
+            document.getElementById('display-monthly-leads').textContent = goals.monthlyLeads;
+
+            updateMetricsDisplay();
+        }
+
+        function loadGoals() {
+            const goals = JSON.parse(localStorage.getItem('goals')) || { dailyLeads: 100, dailyContacts: 20, weeklyRP: 25, monthlyLeads: 2200 };
+
+            document.getElementById('target-daily-leads').value = goals.dailyLeads;
+            document.getElementById('target-daily-contacts').value = goals.dailyContacts;
+            document.getElementById('target-weekly-rp').value = goals.weeklyRP;
+            document.getElementById('target-monthly-leads').value = goals.monthlyLeads;
+
+            document.getElementById('display-daily-leads').textContent = goals.dailyLeads;
+            document.getElementById('display-daily-contacts').textContent = goals.dailyContacts;
+            document.getElementById('display-weekly-rp').textContent = goals.weeklyRP;
+            document.getElementById('display-monthly-leads').textContent = goals.monthlyLeads;
+        }
+
+        function displayWorkflows() {
+            const container = document.getElementById('workflow-container');
+            let html = '';
+            for (let day in WORKFLOW_SCHEDULE) {
+                const w = WORKFLOW_SCHEDULE[day];
+                html += `
+                    <div class="workflow-card">
+                        <div class="workflow-day">${w.day}: ${w.title}</div>
+                        <ul class="workflow-items">
+                            ${w.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function addRP() {
+            const rp = {
+                name: document.getElementById('rp-name').value,
+                brokerage: document.getElementById('rp-brokerage').value,
+                phone: document.getElementById('rp-phone').value,
+                email: document.getElementById('rp-email').value,
+                status: document.getElementById('rp-status').value,
+                notes: document.getElementById('rp-notes').value,
+                timestamp: new Date().toISOString()
+            };
+
+            if (!rp.name || !rp.brokerage) {
+                showMessage('Please fill in name and brokerage', 'error', 'rp-message');
+                return;
+            }
+
+            const rps = JSON.parse(localStorage.getItem('rps')) || [];
+            rps.push(rp);
+            localStorage.setItem('rps', JSON.stringify(rps));
+
+            showMessage('RP added successfully! ✓', 'success', 'rp-message');
+            document.getElementById('rp-name').value = '';
+            document.getElementById('rp-brokerage').value = '';
+            document.getElementById('rp-phone').value = '';
+            document.getElementById('rp-email').value = '';
+            document.getElementById('rp-notes').value = '';
+            loadRPs();
+        }
+
+        function loadRPs() {
+            const rps = JSON.parse(localStorage.getItem('rps')) || [];
+            const tbody = document.getElementById('rp-table');
+
+            if (rps.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #94a3b8;">No RPs added yet.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = rps.map(rp => `
+                <tr>
+                    <td>${rp.name}</td>
+                    <td>${rp.brokerage}</td>
+                    <td><span class="status-badge" style="background: ${rp.status === 'Active' ? '#dcfce7' : '#fef3c7'}; color: ${rp.status === 'Active' ? '#166534' : '#92400e'};">${rp.status}</span></td>
+                    <td>${new Date(rp.timestamp).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        function copyEODSummary() {
+            const summary = `End of Day Summary\n\nLeads Processed: ${document.getElementById('summary-leads').textContent}\nContacts Updated: ${document.getElementById('summary-contacts').textContent}\nOpportunities Reviewed: ${document.getElementById('summary-opportunities').textContent}\nInspections Scheduled: ${document.getElementById('summary-inspections').textContent}\nCalls Handled: ${document.getElementById('summary-calls').textContent}\nRP Contacts Updated: ${document.getElementById('summary-rp').textContent}\nInactive Agents Contacted: ${document.getElementById('summary-inactive').textContent}\nDaily Goal Achievement: ${document.getElementById('summary-goal').textContent}`;
+
+            navigator.clipboard.writeText(summary).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+                showMessage('EOD Summary copied to clipboard!', 'success', 'copy-message');
+            });
+        }
+
+        function showMessage(msg, type, containerId) {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.textContent = msg;
+            container.appendChild(div);
+            setTimeout(() => div.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
