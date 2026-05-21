@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operations Specialist Dashboard - Golden Bear Inspections</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        header .subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 2px;
+        }
+
+        header .byline {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 13px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 0;
+            border-bottom: 2px solid #e0e6ed;
+            flex-wrap: wrap;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            padding: 0 20px;
+        }
+
+        .tab {
+            padding: 14px 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.2s;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tab.active {
+            color: #667eea;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #667eea;
+        }
+
+        .tab:hover:not(.active) {
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 28px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            border-left: 4px solid #667eea;
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .kpi-target {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 6px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            color: #475569;
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 11px 22px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f4ff;
+        }
+
+        .workflow-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .workflow-day {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .workflow-items {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .workflow-items li {
+            padding: 6px 0;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        .workflow-items li:before {
+            content: "• ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .data-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        .data-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .data-table input {
+            padding: 6px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 100%;
+        }
+
+        .data-table input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-on-track {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-at-risk {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-behind {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .accordion {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .accordion-header {
+            background: #f8fafc;
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1e293b;
+            transition: all 0.2s;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .accordion-header:hover {
+            background: #f0f4ff;
+            color: #667eea;
+        }
+
+        .accordion-header.active {
+            background: #667eea;
+            color: white;
+            border-bottom-color: #667eea;
+        }
+
+        .accordion-content {
+            padding: 20px;
+            background: white;
+            display: none;
+        }
+
+        .accordion-content.active {
+            display: block;
+        }
+
+        .script-text {
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #334155;
+            border-left: 3px solid #667eea;
+            margin-bottom: 12px;
+            font-family: 'Courier New', monospace;
+            word-wrap: break-word;
+        }
+
+        .message {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            border-left: 4px solid #10b981;
+            color: #166534;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .non-negotiables {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+        }
+
+        .non-negotiables ol {
+            padding-left: 20px;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        .non-negotiables li {
+            margin-bottom: 8px;
+        }
+
+        .copy-button {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .copy-button:hover {
+            background: #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                padding: 0 10px;
+            }
+
+            .tab {
+                padding: 12px 10px;
+                font-size: 11px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Operations Specialist Dashboard</h1>
+            <div class="subtitle">Project: Golden Bear Inspections</div>
+            <div class="byline">Duff Rose T. — Operations Specialist / Growth Coordinator</div>
+            <div class="user-info">
+                <span>Date: <strong id="dashboard-date"></strong></span>
+                <span id="sync-status">Data: Stored Locally</span>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="home">Home</button>
+            <button class="tab" data-tab="daily-ops">Daily Ops</button>
+            <button class="tab" data-tab="progress">Progress</button>
+            <button class="tab" data-tab="sop-hub">SOP Hub</button>
+            <button class="tab" data-tab="call-scripts">Call Scripts</button>
+            <button class="tab" data-tab="retention">Retention</button>
+        </div>
+
+        <!-- TAB 1: HOME -->
+        <div id="home" class="tab-content active">
+            <div class="section-title">Weekly KPI Overview</div>
+            <div class="kpi-grid" id="home-kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Outbound Calls</div>
+                    <div class="kpi-value">0</div>
+                    <div class="kpi-target">Goal: 75</div>
+                    <div class="progress-bar"><div class="progress-fill danger" style="width: 0%"></div></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Conversations</div>
+                    <div class="kpi-value">0</div>
+                    <div class="kpi-target">Goal: 20</div>
+                    <div class="progress-bar"><div class="progress-fill danger" style="width: 0%"></div></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">CRM Contacts Updated</div>
+                    <div class="kpi-value">0</div>
+                    <div class="kpi-target">Goal: 25</div>
+                    <div class="progress-bar"><div class="progress-fill danger" style="width: 0%"></div></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title" style="margin-bottom: 16px;">Today's Focus Area</div>
+                <div id="todays-workflow"></div>
+            </div>
+
+            <div class="card">
+                <div class="section-title" style="margin-bottom: 16px;">Key Win This Week</div>
+                <div class="form-group">
+                    <textarea id="weekly-win" style="padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; min-height: 80px;" placeholder="What's your biggest win this week?"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="saveWeeklyWin()" style="margin-top: 12px;">Save Win</button>
+                <div id="win-message"></div>
+            </div>
+        </div>
+
+        <!-- TAB 2: DAILY OPS -->
+        <div id="daily-ops" class="tab-content">
+            <div class="section-title">Daily Input Form (90 seconds)</div>
+            <div class="form-section">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Growth: Outbound Calls</label>
+                        <input type="number" id="calls" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Growth: Reached (Conversations)</label>
+                        <input type="number" id="conversations" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Growth: Inactive/No Response</label>
+                        <input type="number" id="inactive-growth" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Growth: Escalated/Complaints</label>
+                        <input type="number" id="escalated" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>CRM: General Contacts Updated</label>
+                        <input type="number" id="crm-general" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>CRM: RP Contacts Updated (Missing Data)</label>
+                        <input type="number" id="crm-rp" min="0" placeholder="0">
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="saveDailyLog()">Save Daily Log</button>
+                </div>
+                <div id="daily-message"></div>
+            </div>
+
+            <div class="section-title" style="margin-top: 28px;">Today's Workflow Focus</div>
+            <div id="daily-workflow-section"></div>
+        </div>
+
+        <!-- TAB 3: PROGRESS -->
+        <div id="progress" class="tab-content">
+            <div class="section-title">Weekly KPI Tracker</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Current</th>
+                            <th>Goal</th>
+                            <th>Progress</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="progress-table">
+                        <tr>
+                            <td><strong>Outbound Calls</strong></td>
+                            <td id="metric-calls">0</td>
+                            <td>75</td>
+                            <td><div class="progress-bar"><div class="progress-fill danger" style="width: 0%"></div></div></td>
+                            <td><span class="status-badge status-behind">✗ Behind</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Conversations</strong></td>
+                            <td id="metric-conversations">0</td>
+                            <td>20</td>
+                            <td><div class="progress-bar"><div class="progress-fill danger" style="width: 0%"></div></div></td>
+                            <td><span class="status-badge status-behind">✗ Behind</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>CRM Contacts Updated</strong></td>
+                            <td id="metric-crm">0</td>
+                            <td>25</td>
+                            <td><div class="progress-bar"><div class="progress-fill danger" style="width: 0%"></div></div></td>
+                            <td><span class="status-badge status-behind">✗ Behind</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 4: SOP HUB -->
+        <div id="sop-hub" class="tab-content">
+            <div class="section-title">Your Dual Role</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 14px;">Growth Coordinator</strong>
+                    <p style="font-size: 13px; color: #475569; margin-top: 8px;">Outbound relationship building (new RP, reactivation, social visibility)</p>
+                </div>
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 14px;">CRM Manager</strong>
+                    <p style="font-size: 13px; color: #475569; margin-top: 8px;">Inbound relationship maintenance (data hygiene, appreciation, follow-ups)</p>
+                </div>
+            </div>
+
+            <div class="section-title">Weekly Workflow Master</div>
+            <div id="sop-workflows"></div>
+
+            <div class="section-title" style="margin-top: 28px;">Non-Negotiables</div>
+            <div class="non-negotiables">
+                <ol>
+                    <li>Smile while speaking</li>
+                    <li>Log immediately — if it's not logged, it didn't happen</li>
+                    <li>Relationships first, business second</li>
+                    <li>Consistency > perfection</li>
+                    <li>Never guess county tags or brokerage names</li>
+                    <li>No CRM system changes without approval</li>
+                    <li>No workflow/automation creation without approval</li>
+                </ol>
+            </div>
+
+            <div class="section-title" style="margin-top: 28px;">KPI Targets</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 13px; text-transform: uppercase;">Growth Coordinator KPIs</strong>
+                    <div style="font-size: 12px; color: #475569; margin-top: 12px; line-height: 1.8;">
+                        • Outbound Realtor Calls: 75<br>
+                        • Realtor Conversations: 20+<br>
+                        • Realtor Meetings Scheduled: 4<br>
+                        • Follow-Up Emails/Texts: 25+<br>
+                        • Inactive Agents Contacted: 15<br>
+                        • Social Posts Published: 3–5<br>
+                        • Review Requests Sent: 100% of completed inspections<br>
+                        • Google Reviews Generated: 2+
+                    </div>
+                </div>
+                <div class="card">
+                    <strong style="color: #667eea; font-size: 13px; text-transform: uppercase;">CRM Manager KPIs</strong>
+                    <div style="font-size: 12px; color: #475569; margin-top: 12px; line-height: 1.8;">
+                        • CRM Contacts Updated: 25+<br>
+                        • RP Contacts Updated (Missing Data): 10+<br>
+                        • Duplicate Records Removed: Weekly reduction<br>
+                        • Postcards Assigned: 5–10<br>
+                        • Birthday Cards Sent: Monthly<br>
+                        • Inactive Agents Contacted: 10+<br>
+                        • CRM Accuracy: 95%+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: CALL SCRIPTS -->
+        <div id="call-scripts" class="tab-content">
+            <div class="section-title">Reference Library - Copy & Paste Ready</div>
+
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Growth Coordinator — New Realtor Outreach</span>
+                    <span>▼</span>
+                </div>
+                <div class="accordion-content">
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">1. Standard New Realtor Outreach</h4>
+                    <div class="script-text">
+"Hi, this is Rose with Golden Bear Inspection Group. Is this [Agent Name]?
+I know I'm catching you during your workday so I'll keep this brief.
+I work directly with Joe, the owner. We've been expanding relationships with local agents and your name came up.
+Joe really enjoys building long-term relationships with agents.
+I'd love to learn about your business and see if we could grab coffee sometime.
+(PAUSE)
+How long have you been in real estate?
+Are you mainly working buyers or sellers?
+What's something you wish inspectors did better?"
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">2. Voicemail Script (New RP)</h4>
+                    <div class="script-text">
+"Hi [Agent Name], this is Rose with Golden Bear Inspection Group.
+I'm reaching out because Joe, our owner, has been connecting with local agents and we'd love to introduce ourselves.
+Feel free to give me a call back at [PHONE].
+I'll also send a quick follow-up message.
+Have a great day!"
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">3. SMS Follow-Up (New RP)</h4>
+                    <div class="script-text">
+"Hi [Agent Name], Rose with Golden Bear Inspection Group. Left a voicemail. Anything I can help with? Reply or call: [PHONE]."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Growth Coordinator — Retention & Check-ins</span>
+                    <span>▼</span>
+                </div>
+                <div class="accordion-content">
+                    <h4 style="margin: 16px 0 8px; font-size: 13px;">4. Realtor Retention Call</h4>
+                    <div class="script-text">
+"Hi [Agent Name], this is Rose with Golden Bear.
+I'm just checking in to see how things have been going for you and to thank you for continuing to trust us.
+How has business been lately?
+(PAUSE)
+Is there anything we could do better to support you or your clients during inspections?
+(PAUSE)
+Thank you again for your partnership. We really appreciate working with you."
+                    </div>
+                    <button class="copy-button" onclick="copyToClipboard(this.nextElementSibling.textContent)">Copy Script</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: RETENTION -->
+        <div id="retention" class="tab-content">
+            <div class="section-title">Postcard Queue</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Agent Name</th>
+                            <th>Brokerage</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Date Assigned</th>
+                        </tr>
+                    </thead>
+                    <tbody id="postcard-queue">
+                        <tr>
+                            <td><input type="text" placeholder="Agent name"></td>
+                            <td><input type="text" placeholder="Brokerage"></td>
+                            <td><input type="text" placeholder="First-time, repeat, milestone, etc."></td>
+                            <td>
+                                <select>
+                                    <option>Ready to send</option>
+                                    <option>Sent</option>
+                                    <option>Mailed</option>
+                                </select>
+                            </td>
+                            <td><input type="date"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-primary" onclick="addPostcardRow()">Add Row</button>
+            <button class="btn btn-secondary" onclick="savePostcards()">Save Postcard Queue</button>
+
+            <div class="section-title" style="margin-top: 28px;">Birthday Calendar</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Agent Name</th>
+                            <th>Brokerage</th>
+                            <th>Birthday (Month/Day)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="birthday-table">
+                        <tr>
+                            <td><input type="text" placeholder="Agent name"></td>
+                            <td><input type="text" placeholder="Brokerage"></td>
+                            <td><input type="text" placeholder="MM/DD"></td>
+                            <td>
+                                <select>
+                                    <option>Not yet</option>
+                                    <option>Assigned to Wren</option>
+                                    <option>Mailed</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-primary" onclick="addBirthdayRow()">Add Row</button>
+            <button class="btn btn-secondary" onclick="saveBirthdays()">Save Birthday Calendar</button>
+
+            <div class="section-title" style="margin-top: 28px;">Inactive Agents (90+ days)</div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Agent Name</th>
+                            <th>Brokerage</th>
+                            <th>Last Inspection Date</th>
+                            <th>Status</th>
+                            <th>Last Contact Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inactive-table">
+                        <tr>
+                            <td><input type="text" placeholder="Agent name"></td>
+                            <td><input type="text" placeholder="Brokerage"></td>
+                            <td><input type="date"></td>
+                            <td>
+                                <select>
+                                    <option>Not contacted</option>
+                                    <option>Contacted</option>
+                                    <option>Follow-up pending</option>
+                                </select>
+                            </td>
+                            <td><input type="date"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-primary" onclick="addInactiveRow()">Add Row</button>
+            <button class="btn btn-secondary" onclick="saveInactive()">Save Inactive List</button>
+        </div>
+    </div>
+
+    <script>
+        const WORKFLOW_SCHEDULE = {
+            1: {
+                day: 'MONDAY',
+                title: 'Accountability & CRM Day',
+                items: ['KPI review', 'CRM cleanup', 'Weekly planning']
+            },
+            2: {
+                day: 'TUESDAY',
+                title: 'New Realtor Outreach Day',
+                items: ['15-20 outbound calls', '2-4 meaningful conversations', '1 meeting scheduled']
+            },
+            3: {
+                day: 'WEDNESDAY',
+                title: 'Retention & Inactive Day',
+                items: ['Contact 15 inactive agents', 'Complete all retention follow-ups', 'Log interactions in GHL']
+            },
+            4: {
+                day: 'THURSDAY',
+                title: 'Brand Visibility Day',
+                items: ['Publish 3-5 social posts', 'Send 100% review requests from completed inspections', 'Follow-up emails/texts']
+            },
+            5: {
+                day: 'FRIDAY',
+                title: 'Pipeline & Reporting Day',
+                items: ['Active agent review', 'Assign postcards', 'Weekly report submission']
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setDashboardDate();
+            initializeTabs();
+            displayTodaysWorkflow();
+            displaySOPWorkflows();
+            loadSavedData();
+        });
+
+        function setDashboardDate() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('dashboard-date').textContent = today.toLocaleDateString('en-US', options);
+        }
+
+        function initializeTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        function getTodayDayNumber() {
+            const day = new Date().getDay();
+            return day === 0 ? 5 : day;
+        }
+
+        function displayTodaysWorkflow() {
+            const dayNum = getTodayDayNumber();
+            const workflow = WORKFLOW_SCHEDULE[dayNum];
+            const container = document.getElementById('todays-workflow');
+
+            if (workflow) {
+                container.innerHTML = `
+                    <div class="workflow-card">
+                        <div class="workflow-day">${workflow.day}: ${workflow.title}</div>
+                        <ul class="workflow-items">
+                            ${workflow.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        function displaySOPWorkflows() {
+            const container = document.getElementById('sop-workflows');
+            let html = '';
+
+            for (let day in WORKFLOW_SCHEDULE) {
+                const workflow = WORKFLOW_SCHEDULE[day];
+                html += `
+                    <div class="workflow-card">
+                        <div class="workflow-day">${workflow.day}: ${workflow.title}</div>
+                        <ul class="workflow-items">
+                            ${workflow.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function displayDailyWorkflow() {
+            const dayNum = getTodayDayNumber();
+            const workflow = WORKFLOW_SCHEDULE[dayNum];
+            const container = document.getElementById('daily-workflow-section');
+
+            if (workflow) {
+                container.innerHTML = `
+                    <div class="workflow-card">
+                        <div class="workflow-day">${workflow.day}: ${workflow.title}</div>
+                        <ul class="workflow-items">
+                            ${workflow.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        function saveDailyLog() {
+            const data = {
+                calls: parseInt(document.getElementById('calls').value) || 0,
+                conversations: parseInt(document.getElementById('conversations').value) || 0,
+                inactiveGrowth: parseInt(document.getElementById('inactive-growth').value) || 0,
+                escalated: parseInt(document.getElementById('escalated').value) || 0,
+                crmGeneral: parseInt(document.getElementById('crm-general').value) || 0,
+                crmRP: parseInt(document.getElementById('crm-rp').value) || 0,
+                date: new Date().toISOString()
+            };
+
+            const logs = JSON.parse(localStorage.getItem('dailyLogs')) || [];
+            logs.push(data);
+            localStorage.setItem('dailyLogs', JSON.stringify(logs));
+
+            showMessage('Daily log saved successfully!', 'success', 'daily-message');
+
+            // Clear inputs
+            document.getElementById('calls').value = '';
+            document.getElementById('conversations').value = '';
+            document.getElementById('inactive-growth').value = '';
+            document.getElementById('escalated').value = '';
+            document.getElementById('crm-general').value = '';
+            document.getElementById('crm-rp').value = '';
+        }
+
+        function saveWeeklyWin() {
+            const win = document.getElementById('weekly-win').value;
+            if (!win.trim()) {
+                showMessage('Please enter your win', 'error', 'win-message');
+                return;
+            }
+
+            const wins = JSON.parse(localStorage.getItem('weeklyWins')) || [];
+            wins.push({
+                win: win,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('weeklyWins', JSON.stringify(wins));
+
+            showMessage('✓ Win saved!', 'success', 'win-message');
+            document.getElementById('weekly-win').value = '';
+        }
+
+        function loadSavedData() {
+            displayDailyWorkflow();
+            const logs = JSON.parse(localStorage.getItem('dailyLogs')) || [];
+            if (logs.length > 0) {
+                const totals = logs.reduce((acc, log) => ({
+                    calls: acc.calls + log.calls,
+                    conversations: acc.conversations + log.conversations,
+                    crm: acc.crm + log.crmGeneral + log.crmRP
+                }), { calls: 0, conversations: 0, crm: 0 });
+
+                document.getElementById('metric-calls').textContent = totals.calls;
+                document.getElementById('metric-conversations').textContent = totals.conversations;
+                document.getElementById('metric-crm').textContent = totals.crm;
+            }
+        }
+
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isActive = content.classList.contains('active');
+
+            document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.accordion-header').forEach(el => el.classList.remove('active'));
+
+            if (!isActive) {
+                content.classList.add('active');
+                header.classList.add('active');
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function addPostcardRow() {
+            const tbody = document.getElementById('postcard-queue');
+            const newRow = tbody.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Agent name"></td>
+                <td><input type="text" placeholder="Brokerage"></td>
+                <td><input type="text" placeholder="Reason"></td>
+                <td>
+                    <select>
+                        <option>Ready to send</option>
+                        <option>Sent</option>
+                        <option>Mailed</option>
+                    </select>
+                </td>
+                <td><input type="date"></td>
+            `;
+        }
+
+        function savePostcards() {
+            localStorage.setItem('postcards', JSON.stringify(getTableData('postcard-queue')));
+            showMessage('Postcard queue saved!', 'success', 'retention');
+        }
+
+        function addBirthdayRow() {
+            const tbody = document.getElementById('birthday-table');
+            const newRow = tbody.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Agent name"></td>
+                <td><input type="text" placeholder="Brokerage"></td>
+                <td><input type="text" placeholder="MM/DD"></td>
+                <td>
+                    <select>
+                        <option>Not yet</option>
+                        <option>Assigned to Wren</option>
+                        <option>Mailed</option>
+                    </select>
+                </td>
+            `;
+        }
+
+        function saveBirthdays() {
+            localStorage.setItem('birthdays', JSON.stringify(getTableData('birthday-table')));
+            showMessage('Birthday calendar saved!', 'success', 'retention');
+        }
+
+        function addInactiveRow() {
+            const tbody = document.getElementById('inactive-table');
+            const newRow = tbody.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Agent name"></td>
+                <td><input type="text" placeholder="Brokerage"></td>
+                <td><input type="date"></td>
+                <td>
+                    <select>
+                        <option>Not contacted</option>
+                        <option>Contacted</option>
+                        <option>Follow-up pending</option>
+                    </select>
+                </td>
+                <td><input type="date"></td>
+            `;
+        }
+
+        function saveInactive() {
+            localStorage.setItem('inactive', JSON.stringify(getTableData('inactive-table')));
+            showMessage('Inactive agents list saved!', 'success', 'retention');
+        }
+
+        function getTableData(tableId) {
+            const table = document.getElementById(tableId);
+            const rows = [];
+            table.querySelectorAll('tr').forEach(row => {
+                const cells = [];
+                row.querySelectorAll('input, select').forEach(cell => {
+                    cells.push(cell.value);
+                });
+                if (cells.some(cell => cell)) rows.push(cells);
+            });
+            return rows;
+        }
+
+        function showMessage(msg, type, containerId) {
+            const container = document.getElementById(containerId || 'message-area');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.textContent = msg;
+            container.appendChild(div);
+            setTimeout(() => div.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
