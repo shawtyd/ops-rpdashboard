@@ -841,7 +841,8 @@
             document.getElementById('input-notes').value = '';
         }
 
-        function updateMetricsDisplay() {
+        850
+            () {
             const logs = JSON.parse(localStorage.getItem('metricLogs')) || [];
             const today = new Date().toDateString();
 
@@ -859,7 +860,12 @@
                     todayMetrics.calls += log.calls;
                     todayMetrics.inactive += log.inactive;
                 }
-                monthlyLeads += log.leads;
+
+                			const currentMonth = new Date().getMonth();
+                			const currentYear = new Date().getFullYear();
+                			if (logDate.getMonth() === currentMonth && logDate.getFullYear() === currentYear) {
+                                				monthlyLeads += log.leads;
+                            }
             });
 
             const goals = JSON.parse(localStorage.getItem('goals')) || { dailyLeads: 100, dailyContacts: 20, weeklyRP: 25, monthlyLeads: 2200 };
