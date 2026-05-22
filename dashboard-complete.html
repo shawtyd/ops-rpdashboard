@@ -929,13 +929,15 @@
                 return;
             }
 
-            tbody.innerHTML = logs.slice(-10).reverse().map(log => `
+tbody.innerHTML = logs.slice(-10).reverse().map(log => {
+    			const totalMetrics = log.leads + log.contacts + log.rpContacts + log.opportunities + log.inspections + log.calls + log.inactive;
+    			return `
                 <tr>
-                    <td>Leads: ${log.leads}, Contacts: ${log.contacts}, RP: ${log.rpContacts}, Calls: ${log.calls}</td>
-                    <td>${log.leads + log.contacts + log.rpContacts}</td>
-                    <td>${new Date(log.timestamp).toLocaleTimeString()}</td>
-                </tr>
-            `).join('');
+                	<td><strong>Leads:</strong> ${log.leads} | <strong>Contacts:</strong> ${log.contacts} | <strong>RP:</strong> ${log.rpContacts} | <strong>Calls:</strong> ${log.calls}</td>
+                    	<td>${totalMetrics}</td>
+                        	<td>${new Date(log.timestamp).toLocaleTimeString()}</td>
+                            </tr>`;
+}).join('');
         }
 
         function saveGoals() {
